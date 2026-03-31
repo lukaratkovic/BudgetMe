@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   private http = inject(HttpClient);
 
   ngOnInit(): void {
-    this.http.get('/api/weatherforecast').subscribe(console.log)
+    this.http.get('/api/transactions').subscribe(console.log)
   }
 
 }

@@ -1,8 +1,16 @@
+    using BudgetMe.API.Data;
+    using BudgetMe.API.DTOs;
+    using Microsoft.EntityFrameworkCore;
+
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
     // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
     builder.Services.AddOpenApi();
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("Default")));
 
     var app = builder.Build();
 
@@ -14,28 +22,16 @@
 
     app.UseHttpsRedirection();
 
-    var summaries = new[]
+    app.MapGet("/api/transactions", async (AppDbContext db) =>
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    app.MapGet("/api/weatherforecast", () =>
-        {
-            var forecast = Enumerable.Range(1, 5).Select(index =>
-                    new WeatherForecast
-                    (
-                        DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                        Random.Shared.Next(-20, 55),
-                        summaries[Random.Shared.Next(summaries.Length)]
-                    ))
-                .ToArray();
-            return forecast;
-        })
-        .WithName("GetWeatherForecast");
+        return await db.BankTransaction
+            .Select(x => new BankTransactionDto
+            {
+                Id = x.Id,
+                Amount = x.Amount,
+                Type = x.TransactionType.Name
+            })
+            .ToListAsync();
+    });
 
     app.Run();
-
-    record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-    {
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }
