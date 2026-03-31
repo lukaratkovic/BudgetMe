@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Transaction} from "../models/transaction.model";
+import {BankTransaction, SaveTransactionDto} from "../models/bank-transaction.model";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -9,7 +9,12 @@ import {Observable} from "rxjs";
 export class TransactionService {
   private http = inject(HttpClient);
 
-  public getAll(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>('/api/transactions');
+  public getAll(): Observable<BankTransaction[]> {
+    return this.http.get<BankTransaction[]>('/api/transactions');
+  }
+
+  // TODO: Change this from any to the correct type
+  public save(data: SaveTransactionDto): Observable<any> {
+    return this.http.post<any>('/api/transaction', data);
   }
 }
