@@ -19,6 +19,11 @@ export class NavbarComponent implements OnInit {
         label: 'My Transactions',
         icon: 'pi pi-credit-card',
         routerLink: '/transactions'
+      },
+      {
+        label: 'Transaction Categories',
+        icon: 'pi pi-folder-open',
+        routerLink: '/categories'
       }
     ]
   }

@@ -1,12 +1,10 @@
-export interface BankTransaction
-{
+export interface BankTransaction {
   Id: string;
   Amount: number;
   Type: string;
 }
 
-export interface SaveTransactionDto
-{
+export interface SaveTransactionDto {
   TransactionTypeId: string;
   Amount: number;
 }

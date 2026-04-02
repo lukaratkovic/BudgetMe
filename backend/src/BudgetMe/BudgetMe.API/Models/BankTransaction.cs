@@ -1,10 +1,12 @@
-﻿namespace BudgetMe.API.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BudgetMe.API.Models;
 
 public class BankTransaction
 {
     public Guid Id { get; set; }
-    public Guid TransactionTypeId { get; set; }
-    public TransactionType TransactionType { get; set; } = null!;
+    [Required] public Guid TransactionTypeId { get; set; }
+    [Required] public TransactionType TransactionType { get; set; }
     public DateTime TransactionTime { get; set; }
     public decimal Amount { get; set; }
 }

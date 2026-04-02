@@ -1,9 +1,11 @@
-﻿namespace BudgetMe.API.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class TransactionType
+namespace BudgetMe.API.Models;
+
+public class TransactionType(Guid id, string name)
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = null!;
+    public Guid Id { get; set; } = id;
+    [Required] [StringLength(50)] public string Name { get; set; } = name;
 }
 
 public static class TransactionTypeIds

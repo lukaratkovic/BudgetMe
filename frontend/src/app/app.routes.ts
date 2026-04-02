@@ -8,6 +8,12 @@ export const routes: Routes = [
         .then(m => m.TransactionGridComponent),
   },
   {
+    path: 'categories',
+    loadComponent: () =>
+      import('./features/categories/components/category-grid/category-grid.component')
+        .then(m => m.CategoryGridComponent),
+  },
+  {
     path: '',
     redirectTo: 'transactions',
     pathMatch: 'full',

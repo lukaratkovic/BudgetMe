@@ -24,9 +24,9 @@
 
     app.UseHttpsRedirection();
 
-    app.MapGet("/api/transactions", async (AppDbContext db) =>
+    app.MapGet("/api/transactions", async (AppDbContext context) =>
     {
-        return await db.BankTransaction
+        return await context.BankTransaction
             .Select(x => new BankTransactionDto
             {
                 Id = x.Id,
@@ -36,9 +36,9 @@
             .ToListAsync();
     });
 
-    app.MapGet("/api/transactionTypes", async (AppDbContext db) =>
+    app.MapGet("/api/transactionTypes", async (AppDbContext context) =>
     {
-        return await db.TransactionType
+        return await context.TransactionType
             .Select(x => new TransactionTypeDto()
             {
                 Id = x.Id,
@@ -47,12 +47,12 @@
             .ToListAsync();
     });
 
-    app.MapPost("/api/transaction", async (SaveTransactionDto dto, AppDbContext db) =>
+    app.MapPost("/api/transaction", async (SaveTransactionDto dto, AppDbContext context) =>
     {
         if (dto.Amount <= 0)
             return Results.BadRequest("Amount must be greater than 0");
 
-        var transactionTypeExists = await db.TransactionType
+        var transactionTypeExists = await context.TransactionType
             .AnyAsync(x => x.Id == dto.TransactionTypeId);
         if (!transactionTypeExists)
             return Results.BadRequest("Provided transaction type does not exist");
@@ -64,10 +64,17 @@
             Amount = dto.Amount,
         };
 
-        db.BankTransaction.Add(transaction);
-        await db.SaveChangesAsync();
+        context.BankTransaction.Add(transaction);
+        await context.SaveChangesAsync();
         
         return Results.Created($"/api/transaction/{transaction.Id}", transaction);
+    });
+
+    app.MapGet("/api/categories", async (AppDbContext context) =>
+    {
+        return await context.Category
+            .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name))
+            .ToListAsync();
     });
 
     app.Run();

@@ -11,20 +11,10 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<TransactionType>().HasData(
-            new TransactionType
-            {
-                Id = TransactionTypeIds.Income,
-                Name = "Income",
-            },
-            new TransactionType
-            {
-                Id = TransactionTypeIds.Expense,
-                Name = "Expense",
-            }
-        );
+        builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
     public DbSet<BankTransaction> BankTransaction => Set<BankTransaction>();
     public DbSet<TransactionType> TransactionType => Set<TransactionType>();
+    public DbSet<Category> Category => Set<Category>();
 }
