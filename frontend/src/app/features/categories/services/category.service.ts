@@ -10,7 +10,7 @@ export class CategoryService {
   private http = inject(HttpClient);
 
   public getAll(): Observable<Category[]> {
-    return this.http.get<Category[]>(`/api/categories`);
+    return this.http.get<Category[]>(`/api/category`);
   }
 
   public getByTransactionType(transactionTypeId?: string): Observable<Category[]> {
@@ -18,6 +18,6 @@ export class CategoryService {
     if (transactionTypeId) {
       params = params.set('transactionTypeId', transactionTypeId);
     }
-    return this.http.get<Category[]>(`/api/categories`, { params });
+    return this.http.get<Category[]>(`/api/category`, { params });
   }
 }

@@ -10,6 +10,6 @@ export class TransactionTypeService {
   private http = inject(HttpClient);
 
   public getAll(): Observable<TransactionType[]> {
-    return this.http.get<TransactionType[]>("api/transactionTypes");
+    return this.http.get<TransactionType[]>("api/transactionType");
   }
 }

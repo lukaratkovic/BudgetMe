@@ -10,7 +10,7 @@ export class TransactionService {
   private http = inject(HttpClient);
 
   public getAll(): Observable<BankTransaction[]> {
-    return this.http.get<BankTransaction[]>('/api/transactions');
+    return this.http.get<BankTransaction[]>('/api/transaction');
   }
 
   // TODO: Change this from any to the correct type
