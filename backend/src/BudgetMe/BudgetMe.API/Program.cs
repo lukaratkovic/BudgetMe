@@ -1,7 +1,9 @@
     using System.Transactions;
     using BudgetMe.API.Data;
-    using BudgetMe.API.DTOs;
-    using BudgetMe.API.Models;
+    using BudgetMe.API.Features.Categories.DTOs;
+    using BudgetMe.API.Features.Transactions;
+    using BudgetMe.API.Features.Transactions.DTOs;
+    using BudgetMe.API.Features.Transactions.Models;
     using Microsoft.EntityFrameworkCore;
 
     var builder = WebApplication.CreateBuilder(args);

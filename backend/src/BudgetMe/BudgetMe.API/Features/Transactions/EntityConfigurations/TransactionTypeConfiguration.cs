@@ -1,8 +1,8 @@
-﻿using BudgetMe.API.Models;
+﻿using BudgetMe.API.Features.Transactions.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BudgetMe.API.EntityConfigurations;
+namespace BudgetMe.API.Features.Transactions.EntityConfigurations;
 
 public class TransactionTypeConfiguration : IEntityTypeConfiguration<TransactionType>
 {

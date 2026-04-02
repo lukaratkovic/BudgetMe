@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BudgetMe.API.Features.Transactions.Models;
 
-namespace BudgetMe.API.Models;
+namespace BudgetMe.API.Features.Categories.Models;
 
 public class Category(Guid id, string name, string? description, Guid transactionTypeId)
 {

@@ -1,8 +1,9 @@
-﻿using BudgetMe.API.Models;
+﻿using BudgetMe.API.Features.Categories.Models;
+using BudgetMe.API.Features.Transactions.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BudgetMe.API.EntityConfigurations;
+namespace BudgetMe.API.Features.Categories.EntityConfigurations;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {

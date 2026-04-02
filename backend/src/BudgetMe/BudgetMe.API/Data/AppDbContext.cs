@@ -1,4 +1,6 @@
-﻿using BudgetMe.API.Models;
+﻿using BudgetMe.API.Features.Categories.Models;
+using BudgetMe.API.Features.Transactions;
+using BudgetMe.API.Features.Transactions.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetMe.API.Data;

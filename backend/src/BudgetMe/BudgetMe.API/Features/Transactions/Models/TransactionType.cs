@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BudgetMe.API.Models;
+namespace BudgetMe.API.Features.Transactions.Models;
 
 public class TransactionType(Guid id, string name)
 {

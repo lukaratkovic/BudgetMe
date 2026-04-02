@@ -1,4 +1,4 @@
-﻿namespace BudgetMe.API.DTOs;
+﻿namespace BudgetMe.API.Features.Categories.DTOs;
 
 public class CategoryDto(Guid id, string name, string? description, string transactionType)
 {

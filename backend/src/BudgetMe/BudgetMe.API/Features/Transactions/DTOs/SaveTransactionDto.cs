@@ -1,4 +1,4 @@
-﻿namespace BudgetMe.API.DTOs;
+﻿namespace BudgetMe.API.Features.Transactions.DTOs;
 
 public class SaveTransactionDto
 {
