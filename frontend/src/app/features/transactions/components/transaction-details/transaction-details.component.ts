@@ -13,6 +13,7 @@ import {CalendarModule} from "primeng/calendar";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CategoryService} from "../../../categories/services/category.service";
 import {Category} from "../../../categories/components/models/category.model";
+import {NotificationService} from "../../../../core/services/notification.service";
 
 @Component({
   selector: 'app-transaction-details',
@@ -27,6 +28,7 @@ export class TransactionDetailsComponent implements OnInit {
   private dialogRef = inject(DynamicDialogRef);
   private transactionService = inject(TransactionService);
   private categoryService = inject(CategoryService);
+  private notificationService = inject(NotificationService);
 
   public form: FormGroup;
 
@@ -71,8 +73,8 @@ export class TransactionDetailsComponent implements OnInit {
       .save(dto)
       .subscribe({
         next: () => this.dialogRef.close({refresh: true}),
-        // TODO: Handle errors, need some popup
-      })
+        error: (err) => this.notificationService.displayError(err.error)
+      });
   }
 
   public close(): void {
