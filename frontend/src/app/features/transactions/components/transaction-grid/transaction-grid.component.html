@@ -1,15 +1,31 @@
 <button pButton type="button" label="New" icon="pi pi-plus" (click)="addNew()"></button>
 <div class="card">
-  <p-table [value]="transactions" [tableStyle]="{'min-width': '50rem'}">
+  <p-table [value]="transactions" sortField="transactionTime" [sortOrder]="-1" [tableStyle]="{'min-width': '50rem'}">
     <ng-template pTemplate="header">
       <tr>
-        <th>Transaction type</th>
-        <th>Amount</th>
+        <th pSortableColumn="type">
+          Transaction type
+          <p-sortIcon field="type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="description">
+          Description
+          <p-sortIcon field="description"></p-sortIcon>
+        </th>
+        <th pSortableColumn="transactionTime">
+          Date & Time
+          <p-sortIcon field="transactionTime"></p-sortIcon>
+        </th>
+        <th pSortableColumn="amount">
+          Amount
+          <p-sortIcon field="amount"></p-sortIcon>
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-transaction>
       <tr>
         <td>{{ transaction.type }}</td>
+        <td>{{ transaction.description }}</td>
+        <td>{{ transaction.transactionTime | date:'EEEE, MMMM dd, y, h:mm a' }}</td>
         <td>{{ transaction.amount }}</td>
       </tr>
     </ng-template>

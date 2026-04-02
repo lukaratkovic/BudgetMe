@@ -2,7 +2,8 @@
 
 public class SaveTransactionDto
 {
-    public Guid? Id { get; set; }
     public Guid TransactionTypeId { get; set; }
     public decimal Amount { get; set; }
+    public DateTime TransactionTime { get; set; }
+    public string? Description { get; set; }
 }

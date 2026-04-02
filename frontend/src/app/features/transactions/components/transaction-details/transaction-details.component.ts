@@ -8,12 +8,14 @@ import {DropdownModule} from "primeng/dropdown";
 import {DynamicDialogRef} from "primeng/dynamicdialog";
 import {ButtonModule} from "primeng/button";
 import {TransactionService} from "../../services/transaction.service";
-import {BankTransaction, SaveTransactionDto} from "../../models/bank-transaction.model";
+import {SaveTransactionDto} from "../../models/bank-transaction.model";
+import {CalendarModule} from "primeng/calendar";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-transaction-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputNumberModule, DropdownModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberModule, DropdownModule, ButtonModule, CalendarModule, InputTextareaModule],
   templateUrl: './transaction-details.component.html',
   styleUrls: ['./transaction-details.component.sass']
 })
@@ -28,9 +30,12 @@ export class TransactionDetailsComponent implements OnInit {
   public transactionTypes: TransactionType[] = [];
 
   constructor() {
+    const now = new Date();
     this.form = this.formBuilder.group({
       typeId: [null, Validators.required],
       amount: [0, [Validators.required, Validators.min(0)]],
+      transactionTime: [now, [Validators.required]],
+      description: [null],
     });
   }
 
@@ -46,6 +51,8 @@ export class TransactionDetailsComponent implements OnInit {
     const dto: SaveTransactionDto = {
       TransactionTypeId: this.form.controls['typeId'].value,
       Amount: this.form.controls['amount'].value,
+      TransactionTime: this.form.controls['transactionTime'].value,
+      Description: this.form.controls['description'].value,
     };
 
     this.transactionService

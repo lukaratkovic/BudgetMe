@@ -27,12 +27,7 @@
     app.MapGet("/api/transactions", async (AppDbContext context) =>
     {
         return await context.BankTransaction
-            .Select(x => new BankTransactionDto
-            {
-                Id = x.Id,
-                Amount = x.Amount,
-                Type = x.TransactionType.Name
-            })
+            .Select(x => new BankTransactionDto(x.Id, x.Amount, x.TransactionType.Name, x.TransactionTime, x.Description))
             .ToListAsync();
     });
 
@@ -57,12 +52,7 @@
         if (!transactionTypeExists)
             return Results.BadRequest("Provided transaction type does not exist");
 
-        var transaction = new BankTransaction
-        {
-            Id = Guid.NewGuid(),
-            TransactionTypeId = dto.TransactionTypeId,
-            Amount = dto.Amount,
-        };
+        var transaction = new BankTransaction(Guid.NewGuid(), dto.TransactionTypeId, dto.TransactionTime, dto.Amount, dto.Description);
 
         context.BankTransaction.Add(transaction);
         await context.SaveChangesAsync();

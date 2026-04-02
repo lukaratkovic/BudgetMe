@@ -33,9 +33,10 @@ export class TransactionGridComponent implements OnInit {
   public addNew(): void {
     this.dialog.open(TransactionDetailsComponent, {
       header: 'New transaction',
-      width: '50%'
-    }).onClose.subscribe(() => {
-      // TODO: Reload
+      width: '30%'
+    }).onClose.subscribe((refresh) => {
+      if (refresh)
+        this.getTransactions();
     });
   }
 }

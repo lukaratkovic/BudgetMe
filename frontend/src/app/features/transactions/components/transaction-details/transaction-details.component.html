@@ -1,8 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="p-fluid">
 
   <div class="grid">
-    <div class="field col-6">
-
+    <div class="field col-12">
       <label for="typeId">Transaction type</label>
       <p-dropdown
         [options]="transactionTypes"
@@ -13,11 +12,26 @@
       </p-dropdown>
     </div>
 
-    <div class="field col-6">
+    <div class="field col-12">
       <label for="amount">Amount</label>
       <p-inputNumber
         formControlName="amount">
       </p-inputNumber>
+    </div>
+
+    <div class="field col-12">
+      <label for="transactionTime">Date & Time</label>
+      <p-calendar
+        formControlName="transactionTime"
+        [showTime]="true"
+        [hourFormat]="'24'"
+        appendTo="body">
+      </p-calendar>
+    </div>
+
+    <div class="field col-12">
+      <label for="description">Description</label>
+      <textarea rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
     </div>
 
   </div>
