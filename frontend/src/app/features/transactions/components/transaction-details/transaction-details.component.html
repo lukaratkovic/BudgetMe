@@ -15,6 +15,8 @@
     <div class="field col-12">
       <label for="amount">Amount</label>
       <p-inputNumber
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
         formControlName="amount">
       </p-inputNumber>
     </div>

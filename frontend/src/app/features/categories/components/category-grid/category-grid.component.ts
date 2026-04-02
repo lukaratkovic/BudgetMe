@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {CategoryService} from "../../services/category.service";
-import {Category} from "../models/category.model";
+import {Category} from "../../models/category.model";
 import {TableModule} from "primeng/table";
 
 @Component({

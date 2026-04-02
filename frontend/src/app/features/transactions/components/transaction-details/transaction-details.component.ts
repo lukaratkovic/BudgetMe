@@ -12,7 +12,7 @@ import {SaveTransactionDto} from "../../models/bank-transaction.model";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CategoryService} from "../../../categories/services/category.service";
-import {Category} from "../../../categories/components/models/category.model";
+import {Category} from "../../../categories/models/category.model";
 import {NotificationService} from "../../../../core/services/notification.service";
 
 @Component({

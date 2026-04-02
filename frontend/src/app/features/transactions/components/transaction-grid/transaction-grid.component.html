@@ -1,6 +1,6 @@
 <button pButton type="button" label="New" icon="pi pi-plus" (click)="addNew()"></button>
 <div class="card">
-  <p-table [value]="transactions" sortField="transactionTime" [sortOrder]="-1" [tableStyle]="{'min-width': '50rem'}">
+  <p-table [value]="transactions" sortField="transactionTime" [sortOrder]="-1" [paginator]="true" [rows]="10" [tableStyle]="{'min-width': '50rem'}">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="type">
@@ -26,7 +26,7 @@
         <td>{{ transaction.type }}</td>
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.transactionTime | date:'EEEE, MMMM dd, y, h:mm a' }}</td>
-        <td>{{ transaction.amount }}</td>
+        <td>{{ transaction.amount | number: '1.2-2' }}</td>
       </tr>
     </ng-template>
   </p-table>

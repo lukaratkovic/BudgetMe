@@ -1,5 +1,5 @@
 <div class="card">
-  <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}" sortField="transactionType">
+  <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}" sortField="transactionType" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="name">
