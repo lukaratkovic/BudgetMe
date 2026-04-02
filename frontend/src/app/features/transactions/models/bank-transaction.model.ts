@@ -11,4 +11,5 @@ export interface SaveTransactionDto {
   Amount: number;
   TransactionTime: Date;
   Description?: string;
+  CategoryId: string;
 }

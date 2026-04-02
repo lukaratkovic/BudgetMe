@@ -53,8 +53,13 @@
             .AnyAsync(x => x.Id == dto.TransactionTypeId);
         if (!transactionTypeExists)
             return Results.BadRequest("Provided transaction type does not exist");
+        
+        var categoryExists = await context.Category
+            .AnyAsync(x => x.Id == dto.CategoryId);
+        if (!categoryExists)
+            return Results.BadRequest("Provided category does not exist");
 
-        var transaction = new BankTransaction(Guid.NewGuid(), dto.TransactionTypeId, dto.TransactionTime, dto.Amount, dto.Description);
+        var transaction = new BankTransaction(Guid.NewGuid(), dto.TransactionTypeId, dto.TransactionTime, dto.Amount, dto.Description, dto.CategoryId);
 
         context.BankTransaction.Add(transaction);
         await context.SaveChangesAsync();
@@ -62,9 +67,17 @@
         return Results.Created($"/api/transaction/{transaction.Id}", transaction);
     });
 
-    app.MapGet("/api/categories", async (AppDbContext context) =>
+    app.MapGet("/api/categories", async (
+        Guid? transactionTypeId,
+        AppDbContext context
+    ) =>
     {
-        return await context.Category
+        var query = context.Category.AsQueryable();
+        
+        if (transactionTypeId.HasValue)
+            query = query.Where(x => x.TransactionTypeId == transactionTypeId);
+        
+        return await query
             .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name))
             .ToListAsync();
     });

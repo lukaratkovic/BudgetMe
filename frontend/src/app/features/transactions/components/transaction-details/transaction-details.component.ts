@@ -11,6 +11,8 @@ import {TransactionService} from "../../services/transaction.service";
 import {SaveTransactionDto} from "../../models/bank-transaction.model";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {CategoryService} from "../../../categories/services/category.service";
+import {Category} from "../../../categories/components/models/category.model";
 
 @Component({
   selector: 'app-transaction-details',
@@ -24,10 +26,12 @@ export class TransactionDetailsComponent implements OnInit {
   public transactionTypeService = inject(TransactionTypeService);
   private dialogRef = inject(DynamicDialogRef);
   private transactionService = inject(TransactionService);
+  private categoryService = inject(CategoryService);
 
   public form: FormGroup;
 
   public transactionTypes: TransactionType[] = [];
+  public categories: Category[] = [];
 
   constructor() {
     const now = new Date();
@@ -36,11 +40,18 @@ export class TransactionDetailsComponent implements OnInit {
       amount: [0, [Validators.required, Validators.min(0)]],
       transactionTime: [now, [Validators.required]],
       description: [null],
+      categoryId: [null, [Validators.required]],
     });
   }
 
   ngOnInit(): void {
     this.transactionTypeService.getAll().subscribe(data => this.transactionTypes = data);
+
+    this.form.controls["typeId"].valueChanges.subscribe((id) => this.getCategoriesByTransactionType(id));
+  }
+
+  private getCategoriesByTransactionType(transactionTypeId: string): void {
+    this.categoryService.getByTransactionType(transactionTypeId).subscribe(data => this.categories = data);
   }
 
   public submit(): void {
@@ -53,6 +64,7 @@ export class TransactionDetailsComponent implements OnInit {
       Amount: this.form.controls['amount'].value,
       TransactionTime: this.form.controls['transactionTime'].value,
       Description: this.form.controls['description'].value,
+      CategoryId: this.form.controls['categoryId'].value,
     };
 
     this.transactionService
