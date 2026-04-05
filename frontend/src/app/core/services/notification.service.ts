@@ -7,11 +7,12 @@ import {MessageService} from "primeng/api";
 export class NotificationService {
   private messageService = inject(MessageService);
 
-  public displayError(error: string): void {
+  public displayError(error: any): void {
+    const message = error?.error?.message ?? error?.error ?? error;
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
-      detail: error
+      detail: message
     });
   }
 }

@@ -3,6 +3,7 @@ export interface Category  {
   name: string;
   description: string;
   transactionType: string;
+  isSystem: boolean;
 }
 
 export interface CreateCategoryDto {

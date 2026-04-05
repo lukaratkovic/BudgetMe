@@ -24,4 +24,8 @@ export class CategoryService {
   public save(data: CreateCategoryDto): Observable<CreateCategoryDto> {
     return this.http.post<CreateCategoryDto>(`/api/category`, data);
   }
+
+  public delete(id: string): Observable<void> {
+    return this.http.delete<void>(`/api/category/${id}`);
+  }
 }

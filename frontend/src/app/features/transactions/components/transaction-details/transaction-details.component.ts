@@ -70,7 +70,7 @@ export class TransactionDetailsComponent implements OnInit {
           this.form.patchValue(data);
           this.id = data.id;
         },
-        error: (err) => this.notificationService.displayError(err.error),
+        error: (err) => this.notificationService.displayError(err),
       });
   }
 
@@ -96,7 +96,7 @@ export class TransactionDetailsComponent implements OnInit {
       .save(dto)
       .subscribe({
         next: () => this.dialogRef.close({refresh: true}),
-        error: (err) => this.notificationService.displayError(err.error)
+        error: (err) => this.notificationService.displayError(err)
       });
   }
 
@@ -105,7 +105,7 @@ export class TransactionDetailsComponent implements OnInit {
       .update(dto)
       .subscribe({
         next: () => this.dialogRef.close({refresh: true}),
-        error: (err) => this.notificationService.displayError(err.error)
+        error: (err) => this.notificationService.displayError(err)
       });
   }
 

@@ -57,7 +57,7 @@ export class CategoryDetailsComponent implements OnInit {
       .save(dto)
       .subscribe({
         next: () => this.dialogRef.close(true),
-        error: (err) => this.notificationService.displayError(err.error),
+        error: (err) => this.notificationService.displayError(err),
       });
   }
 

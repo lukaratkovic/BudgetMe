@@ -21,7 +21,7 @@ public static class CategoryEndpoints
                 query = query.Where(x => x.TransactionTypeId == transactionTypeId);
         
             return await query
-                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name))
+                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.IsSystem))
                 .ToListAsync();
         });
 
@@ -42,6 +42,23 @@ public static class CategoryEndpoints
             }
             
             return Results.Created($"/api/category/{category.Id}", category); // TODO: Implement this get
+        });
+
+        app.MapDelete("/api/category/{id}", async (Guid id, AppDbContext context) =>
+        {
+            if (await context.Category.FindAsync(id) is { } category)
+            {
+                if (category.IsSystem)
+                    return Results.Json(
+                        new { message = "System categories cannot be deleted." },
+                        statusCode: StatusCodes.Status403Forbidden
+                    );
+                context.Category.Remove(category);
+                await context.SaveChangesAsync();
+                return Results.NoContent();
+            }
+
+            return Results.NotFound();
         });
     }
 }

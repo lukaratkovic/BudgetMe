@@ -3,6 +3,7 @@
   <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}" sortField="transactionType" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
+        <th></th>
         <th pSortableColumn="name">
           Name
           <p-sortIcon field="name"></p-sortIcon>
@@ -19,6 +20,15 @@
     </ng-template>
     <ng-template pTemplate="body" let-category>
       <tr>
+        <td>
+          <button
+            *ngIf="!category.isSystem"
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-rounded, p-button-sm p-button-danger"
+            (click)="onDelete(category)"></button>
+        </td>
         <td>{{ category.name }}</td>
         <td>{{ category.description }}</td>
         <td>{{ category.transactionType }}</td>
@@ -26,3 +36,5 @@
     </ng-template>
   </p-table>
 </div>
+
+<p-confirmDialog />

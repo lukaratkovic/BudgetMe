@@ -74,7 +74,7 @@ export class TransactionGridComponent implements OnInit {
       .delete(id)
       .subscribe({
         next: () => this.getTransactions(),
-        error: (err) => this.notificationService.displayError(err.error),
+        error: (err) => this.notificationService.displayError(err),
       });
   }
 
