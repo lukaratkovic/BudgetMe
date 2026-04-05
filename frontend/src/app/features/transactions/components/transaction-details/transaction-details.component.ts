@@ -8,7 +8,7 @@ import {DropdownModule} from "primeng/dropdown";
 import {DynamicDialogRef} from "primeng/dynamicdialog";
 import {ButtonModule} from "primeng/button";
 import {TransactionService} from "../../services/transaction.service";
-import {SaveTransactionDto} from "../../models/bank-transaction.model";
+import {CreateBankTransactionDto} from "../../models/bank-transaction.model";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CategoryService} from "../../../categories/services/category.service";
@@ -61,7 +61,7 @@ export class TransactionDetailsComponent implements OnInit {
       return;
 
     // TODO: See if I really have to create a whole new object here or I can cast form data somehow
-    const dto: SaveTransactionDto = {
+    const dto: CreateBankTransactionDto = {
       TransactionTypeId: this.form.controls['typeId'].value,
       Amount: this.form.controls['amount'].value,
       TransactionTime: this.form.controls['transactionTime'].value,

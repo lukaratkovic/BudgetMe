@@ -6,7 +6,7 @@ export interface BankTransaction {
   description: string;
 }
 
-export interface SaveTransactionDto {
+export interface CreateBankTransactionDto {
   TransactionTypeId: string;
   Amount: number;
   TransactionTime: Date;

@@ -1,6 +1,6 @@
 ﻿namespace BudgetMe.API.Features.Transactions.DTOs;
 
-public class SaveTransactionDto
+public class CreateBankTransactionDto
 {
     public Guid TransactionTypeId { get; set; }
     public decimal Amount { get; set; }

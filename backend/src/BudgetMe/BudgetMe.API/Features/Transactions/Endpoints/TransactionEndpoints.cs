@@ -32,7 +32,7 @@ public static class TransactionEndpoints
                 : Results.NotFound();
         });
         
-        app.MapPost("/api/transaction", async (SaveTransactionDto dto, AppDbContext context) =>
+        app.MapPost("/api/transaction", async (CreateBankTransactionDto dto, AppDbContext context) =>
         {
             if (dto.Amount <= 0)
                 return Results.BadRequest("Amount must be greater than 0");
