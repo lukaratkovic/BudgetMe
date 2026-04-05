@@ -70,11 +70,7 @@ public static class TransactionEndpoints
         app.MapGet("/api/transactionType", async (AppDbContext context) =>
         {
             return await context.TransactionType
-                .Select(x => new TransactionTypeDto()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                })
+                .Select(x => new TransactionTypeDto(x.Id, x.Name))
                 .ToListAsync();
         });
     }
