@@ -1,3 +1,4 @@
+<button pButton type="button" label="New" icon="pi pi-plus" (click)="addNew()"></button>
 <div class="card">
   <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}" sortField="transactionType" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">

@@ -10,17 +10,20 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         builder.HasKey(x => x.Id);
+        builder
+            .HasIndex(x => new { x.Name, x.TransactionTypeId })
+            .IsUnique();
         builder.HasData(
-            new Category(CategoryIds.Household, "Household", null, TransactionTypeIds.Expense),
-            new Category(CategoryIds.Food, "Food", null, TransactionTypeIds.Expense),
-            new Category(CategoryIds.Entertainment, "Entertainment", null, TransactionTypeIds.Expense),
-            new Category(CategoryIds.Transportation, "Transportation", null, TransactionTypeIds.Expense),
-            new Category(CategoryIds.GiftExpense, "Gift", null, TransactionTypeIds.Expense),
-            new Category(CategoryIds.OtherExpense, "Transportation", null, TransactionTypeIds.Expense),
+            new Category(CategoryIds.Household, "Household", null, TransactionTypeIds.Expense, true),
+            new Category(CategoryIds.Food, "Food", null, TransactionTypeIds.Expense, true),
+            new Category(CategoryIds.Entertainment, "Entertainment", null, TransactionTypeIds.Expense, true),
+            new Category(CategoryIds.Transportation, "Transportation", null, TransactionTypeIds.Expense, true),
+            new Category(CategoryIds.GiftExpense, "Gift", null, TransactionTypeIds.Expense, true),
+            new Category(CategoryIds.OtherExpense, "Other", null, TransactionTypeIds.Expense, true),
             
-            new Category(CategoryIds.Earnings, "Earnings", null, TransactionTypeIds.Income),
-            new Category(CategoryIds.GiftIncome, "Gift", null, TransactionTypeIds.Income),
-            new Category(CategoryIds.OtherIncome, "Other", null, TransactionTypeIds.Income)
+            new Category(CategoryIds.Earnings, "Earnings", null, TransactionTypeIds.Income, true),
+            new Category(CategoryIds.GiftIncome, "Gift", null, TransactionTypeIds.Income, true),
+            new Category(CategoryIds.OtherIncome, "Other", null, TransactionTypeIds.Income, true)
         );
     }
 }

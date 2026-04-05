@@ -10,6 +10,12 @@ public class Category(Guid id, string name, string? description, Guid transactio
     [StringLength(250)] public string? Description { get; set; } = description;
     [Required] public Guid TransactionTypeId { get; set; } = transactionTypeId;
     [Required] public TransactionType TransactionType { get; set; }
+    [Required] public bool IsSystem { get; set; } = false;
+
+    public Category(Guid id, string name, string? description, Guid transactionTypeId, bool isSystem) : this(id, name, description, transactionTypeId)
+    {
+        this.IsSystem =  isSystem;
+    }
 }
 
 public class CategoryIds
