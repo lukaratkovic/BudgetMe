@@ -7,8 +7,8 @@ import {TransactionTypeService} from "../../../transactions/services/transaction
 import {TransactionType} from "../../../transactions/models/transaction-type.model";
 import {DropdownModule} from "primeng/dropdown";
 import {ButtonModule} from "primeng/button";
-import {DynamicDialogRef} from "primeng/dynamicdialog";
-import {CreateCategoryDto} from "../../models/category.model";
+import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
+import {CreateCategoryDto, UpdateCategoryDto} from "../../models/category.model";
 import {CategoryService} from "../../services/category.service";
 import {NotificationService} from "../../../../core/services/notification.service";
 
@@ -25,8 +25,11 @@ export class CategoryDetailsComponent implements OnInit {
   private categoryService = inject(CategoryService);
   private dialogRef = inject(DynamicDialogRef);
   private notificationService = inject(NotificationService);
+  private dialogConfig = inject(DynamicDialogConfig);
 
   public form: FormGroup;
+
+  private id?: string;
 
   public transactionTypes: TransactionType[] = [];
 
@@ -41,6 +44,18 @@ export class CategoryDetailsComponent implements OnInit {
   ngOnInit() {
     this.transactionTypeService.getAll()
       .subscribe(data => this.transactionTypes = data);
+    this.loadEntity();
+  }
+
+  private loadEntity(): void {
+    const id = this.dialogConfig.data?.categoryId;
+    if (!id) return;
+
+    this.categoryService.get(id)
+      .subscribe(data => {
+        this.form.patchValue(data);
+        this.id = data.id;
+      });
   }
 
   public submit(): void {
@@ -49,7 +64,20 @@ export class CategoryDetailsComponent implements OnInit {
 
     const dto = this.form.getRawValue();
 
-    this.insert(dto as CreateCategoryDto);
+    if (this.id) {
+      this.update(dto as UpdateCategoryDto);
+    } else {
+      this.insert(dto as CreateCategoryDto);
+    }
+  }
+
+  private update(dto: UpdateCategoryDto): void {
+    this.categoryService
+      .update(this.id as string, dto)
+      .subscribe({
+        next: () => this.dialogRef.close(true),
+        error: (err) => this.notificationService.displayError(err),
+      });
   }
 
   private insert(dto: CreateCategoryDto): void {

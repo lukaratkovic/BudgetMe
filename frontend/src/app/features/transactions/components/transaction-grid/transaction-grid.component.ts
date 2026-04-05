@@ -35,6 +35,7 @@ export class TransactionGridComponent implements OnInit {
       .subscribe(transactions => this.transactions = transactions);
   }
 
+  // TODO: Combine addNew and onEdit into one method
   public addNew(): void {
     this.dialog.open(TransactionDetailsComponent, {
       header: 'New transaction',

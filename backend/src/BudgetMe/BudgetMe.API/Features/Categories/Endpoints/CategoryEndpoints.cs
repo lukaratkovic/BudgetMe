@@ -21,8 +21,19 @@ public static class CategoryEndpoints
                 query = query.Where(x => x.TransactionTypeId == transactionTypeId);
         
             return await query
-                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.IsSystem))
+                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.TransactionTypeId, x.IsSystem))
                 .ToListAsync();
+        });
+
+        app.MapGet("/api/category/{id}", async (Guid id, AppDbContext context) =>
+        {
+            var category = await context.Category
+                .Where(x => x.Id == id)
+                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.TransactionTypeId, x.IsSystem))
+                .FirstOrDefaultAsync();
+            return category is not null
+                ? Results.Ok(category)
+                : Results.NotFound();
         });
 
         app.MapPost("/api/category", async (CreateCategoryDto dto, AppDbContext context) =>
@@ -44,6 +55,27 @@ public static class CategoryEndpoints
             return Results.Created($"/api/category/{category.Id}", category); // TODO: Implement this get
         });
 
+        app.MapPut("/api/category/{id}", async (Guid id, UpdateCategoryDto dto, AppDbContext context) =>
+        {
+            var category = await context.Category
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+            if (category is null)
+                return Results.NotFound();
+            if (category.IsSystem)
+                return Results.Json(
+                    new { message = "System categories cannot be updated." },
+                    statusCode: StatusCodes.Status403Forbidden
+                );
+            
+            category.Name = dto.Name;
+            category.Description = dto.Description;
+            category.TransactionTypeId = dto.TransactionTypeId;
+            
+            await context.SaveChangesAsync();
+            return Results.NoContent();
+        });
+
         app.MapDelete("/api/category/{id}", async (Guid id, AppDbContext context) =>
         {
             if (await context.Category.FindAsync(id) is { } category)
@@ -58,7 +90,7 @@ public static class CategoryEndpoints
                     .AnyAsync(x => x.CategoryId == category.Id);
                 if (hasRelatedTransactions)
                     return Results.Json(
-                        new { message = "Transactions with this category exist. Please delete related transactions or change their type before retrying." },
+                        new { message = "Transactions with this category exist. Please delete related transactions or change their category before retrying." },
                         statusCode: StatusCodes.Status403Forbidden
                     );
                 

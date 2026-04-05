@@ -102,7 +102,7 @@ export class TransactionDetailsComponent implements OnInit {
 
   public update(dto: UpdateBankTransactionDto): void {
     this.transactionService
-      .update(dto)
+      .update(this.id as string, dto)
       .subscribe({
         next: () => this.dialogRef.close({refresh: true}),
         error: (err) => this.notificationService.displayError(err)

@@ -25,6 +25,14 @@
             *ngIf="!category.isSystem"
             pButton
             type="button"
+            icon="pi pi-pencil"
+            class="p-button-text p-button-rounded p-button-sm"
+            (click)="onEdit(category)">
+          </button>
+          <button
+            *ngIf="!category.isSystem"
+            pButton
+            type="button"
             icon="pi pi-trash"
             class="p-button-text p-button-rounded, p-button-sm p-button-danger"
             (click)="onDelete(category)"></button>

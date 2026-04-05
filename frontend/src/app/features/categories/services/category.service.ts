@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Category, CreateCategoryDto} from "../models/category.model";
+import {Category, CreateCategoryDto, UpdateCategoryDto} from "../models/category.model";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,10 @@ export class CategoryService {
 
   public getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(`/api/category`);
+  }
+
+  public get(id: string): Observable<Category> {
+    return this.http.get<Category>(`/api/category/${id}`);
   }
 
   public getByTransactionType(transactionTypeId?: string): Observable<Category[]> {
@@ -23,6 +27,10 @@ export class CategoryService {
 
   public save(data: CreateCategoryDto): Observable<CreateCategoryDto> {
     return this.http.post<CreateCategoryDto>(`/api/category`, data);
+  }
+
+  public update(id: string, data: UpdateCategoryDto): Observable<void> {
+    return this.http.put<void>(`/api/category/${id}`, data);
   }
 
   public delete(id: string): Observable<void> {

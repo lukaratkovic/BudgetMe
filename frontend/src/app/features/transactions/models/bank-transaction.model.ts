@@ -29,7 +29,6 @@ export interface CreateBankTransactionDto {
 }
 
 export interface UpdateBankTransactionDto {
-  id: string;
   transactionTypeId: string;
   amount: number;
   transactionTime: Date | string;

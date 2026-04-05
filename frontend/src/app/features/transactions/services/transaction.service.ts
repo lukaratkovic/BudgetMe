@@ -32,9 +32,9 @@ export class TransactionService {
     return this.http.post<CreateBankTransactionDto>('/api/transaction', data);
   }
 
-  public update(data: UpdateBankTransactionDto): Observable<void> {
+  public update(id: string, data: UpdateBankTransactionDto): Observable<void> {
     data.transactionTime = DateHelper.toLocalDateTimeString(data.transactionTime as Date);
-    return this.http.put<void>(`/api/transaction/${data.id}`, data);
+    return this.http.put<void>(`/api/transaction/${id}`, data);
   }
 
   public delete(id: string): Observable<void> {

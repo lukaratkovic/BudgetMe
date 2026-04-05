@@ -11,3 +11,9 @@ export interface CreateCategoryDto {
   description?: string;
   transactionTypeId: string;
 }
+
+export interface UpdateCategoryDto {
+  name: string;
+  description?: string;
+  transactionTypeId: string;
+}

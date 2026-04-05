@@ -35,10 +35,24 @@ export class CategoryGridComponent implements OnInit {
       .subscribe(categories => this.categories = categories);
   }
 
+  // TODO: Combine addNew and onEdit into one method
   public addNew(): void {
     this.dialog.open(CategoryDetailsComponent, {
       header: 'New category',
       width: '30%',
+    }).onClose.subscribe((refresh) => {
+      if (refresh)
+        this.getCategories();
+    });
+  }
+
+  public onEdit(category: Category): void {
+    this.dialog.open(CategoryDetailsComponent, {
+      header: 'Edit category',
+      width: '30%',
+      data: {
+        categoryId: category.id,
+      }
     }).onClose.subscribe((refresh) => {
       if (refresh)
         this.getCategories();
