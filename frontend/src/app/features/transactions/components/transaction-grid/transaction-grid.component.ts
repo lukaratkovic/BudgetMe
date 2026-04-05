@@ -6,6 +6,7 @@ import {TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {DialogService} from "primeng/dynamicdialog";
 import {TransactionDetailsComponent} from "../transaction-details/transaction-details.component";
+import {NotificationService} from "../../../../core/services/notification.service";
 
 @Component({
   selector: 'app-transaction-grid',
@@ -18,6 +19,7 @@ import {TransactionDetailsComponent} from "../transaction-details/transaction-de
 export class TransactionGridComponent implements OnInit {
   private transactionService = inject(TransactionService);
   private dialog = inject(DialogService);
+  private notificationService = inject(NotificationService);
 
   public transactions: BankTransaction[] = [];
 
@@ -38,6 +40,16 @@ export class TransactionGridComponent implements OnInit {
       if (refresh)
         this.getTransactions();
     });
+  }
+
+  public onDelete(transaction: BankTransaction): void {
+    //TODO: Confirm
+    this.transactionService
+      .delete(transaction.id)
+      .subscribe({
+        next: () => this.getTransactions(),
+        error: (err) => this.notificationService.displayError(err.error),
+      });
   }
 
   public get balance(): number {

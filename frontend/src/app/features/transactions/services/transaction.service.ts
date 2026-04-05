@@ -17,4 +17,8 @@ export class TransactionService {
   public save(data: SaveTransactionDto): Observable<any> {
     return this.http.post<any>('/api/transaction', data);
   }
+
+  public delete(id: string): Observable<void> {
+    return this.http.delete<void>(`/api/transaction/${id}`);
+  }
 }

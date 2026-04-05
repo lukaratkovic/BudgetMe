@@ -54,6 +54,18 @@ public static class TransactionEndpoints
         
             return Results.Created($"/api/transaction/{transaction.Id}", transaction);
         });
+
+        app.MapDelete("/api/transaction/{id}", async (Guid id, AppDbContext context) =>
+        {
+            if (await context.BankTransaction.FindAsync(id) is { } transaction)
+            {
+                context.BankTransaction.Remove(transaction);
+                await context.SaveChangesAsync();
+                return Results.NoContent();
+            }
+
+            return Results.NotFound();
+        });
         
         app.MapGet("/api/transactionType", async (AppDbContext context) =>
         {

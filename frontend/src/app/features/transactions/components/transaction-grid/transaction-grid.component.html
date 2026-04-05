@@ -3,6 +3,7 @@
   <p-table [value]="transactions" sortField="transactionTime" [sortOrder]="-1" [paginator]="true" [rows]="10" [tableStyle]="{'min-width': '50rem'}">
     <ng-template pTemplate="header">
       <tr>
+        <th></th>
         <th pSortableColumn="type">
           Transaction type
           <p-sortIcon field="type"></p-sortIcon>
@@ -23,6 +24,15 @@
     </ng-template>
     <ng-template pTemplate="body" let-transaction>
       <tr>
+        <td>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-rounded p-button-sm p-button-danger"
+            (click)="onDelete(transaction)">
+          </button>
+        </td>
         <td>{{ transaction.type }}</td>
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.transactionTime | date:'EEEE, MMMM dd, y, h:mm a' }}</td>
@@ -31,6 +41,7 @@
     </ng-template>
     <ng-template pTemplate="footer">
       <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td><b>Balance:</b></td>
