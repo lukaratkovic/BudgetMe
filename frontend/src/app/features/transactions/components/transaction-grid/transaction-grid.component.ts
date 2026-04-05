@@ -42,6 +42,19 @@ export class TransactionGridComponent implements OnInit {
     });
   }
 
+  public onEdit(transaction: BankTransaction): void {
+    this.dialog.open(TransactionDetailsComponent, {
+      header: 'Edit transaction',
+      width: '30%',
+      data: {
+        transactionId: transaction.id
+      }
+    }).onClose.subscribe((refresh) => {
+      if (refresh)
+        this.getTransactions();
+    });
+  }
+
   public onDelete(transaction: BankTransaction): void {
     //TODO: Confirm
     this.transactionService

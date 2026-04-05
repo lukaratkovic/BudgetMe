@@ -2,12 +2,12 @@
 
   <div class="grid">
     <div class="field col-12">
-      <label for="typeId">Transaction type</label>
+      <label for="transactionTypeId">Transaction type</label>
       <p-dropdown
         [options]="transactionTypes"
         optionLabel="name"
         optionValue="id"
-        formControlName="typeId"
+        formControlName="transactionTypeId"
         appendTo="body">
       </p-dropdown>
     </div>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="field col-12">
-      <label for="typeId">Category</label>
+      <label for="transactionTypeId">Category</label>
       <p-dropdown
         [options]="categories"
         optionLabel="name"

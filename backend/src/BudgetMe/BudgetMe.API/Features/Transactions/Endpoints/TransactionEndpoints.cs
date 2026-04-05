@@ -12,7 +12,15 @@ public static class TransactionEndpoints
         app.MapGet("/api/transaction", async (AppDbContext context) =>
         {
             return await context.BankTransaction
-                .Select(x => new BankTransactionDto(x.Id, x.Amount, x.TransactionType.Name, x.TransactionTime, x.Description))
+                .Select(x => new BankTransactionDto(
+                    x.Id,
+                    x.Amount,
+                    x.TransactionType.Name,
+                    x.TransactionTypeId,
+                    x.Category.Name,
+                    x.CategoryId,
+                    x.TransactionTime,
+                    x.Description))
                 .ToListAsync();
         });
 
@@ -24,6 +32,9 @@ public static class TransactionEndpoints
                     x.Id,
                     x.Amount,
                     x.TransactionType.Name,
+                    x.TransactionTypeId,
+                    x.Category.Name,
+                    x.CategoryId,
                     x.TransactionTime,
                     x.Description))
                 .FirstOrDefaultAsync();
@@ -53,6 +64,24 @@ public static class TransactionEndpoints
             await context.SaveChangesAsync();
         
             return Results.Created($"/api/transaction/{transaction.Id}", transaction);
+        });
+
+        app.MapPut("/api/transaction/{id}", async (UpdateBankTransactionDto dto, Guid id, AppDbContext context) =>
+        {
+            var affected = await context.BankTransaction
+                .Where(x => x.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(x => x.TransactionTypeId, dto.TransactionTypeId)
+                    .SetProperty(x => x.Amount, dto.Amount)
+                    .SetProperty(x => x.TransactionTime, dto.TransactionTime)
+                    .SetProperty(x => x.CategoryId, dto.CategoryId)
+                    .SetProperty(x => x.Description, dto.Description)
+                );
+            
+            if (affected == 0)
+                return Results.NotFound();
+
+            return Results.NoContent();
         });
 
         app.MapDelete("/api/transaction/{id}", async (Guid id, AppDbContext context) =>

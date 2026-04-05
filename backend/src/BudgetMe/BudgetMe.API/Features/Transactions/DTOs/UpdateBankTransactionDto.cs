@@ -1,11 +1,8 @@
 ﻿namespace BudgetMe.API.Features.Transactions.DTOs;
 
-public record BankTransactionDto(
-    Guid Id,
-    decimal Amount,
-    string Type,
+public record UpdateBankTransactionDto(
     Guid TransactionTypeId,
-    string Category,
-    Guid CategoryId,
+    decimal Amount,
     DateTime TransactionTime,
+    Guid CategoryId,
     string? Description);

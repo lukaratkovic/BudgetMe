@@ -2,14 +2,26 @@ export interface BankTransaction {
   id: string;
   amount: number;
   type: string;
-  transactionType: Date;
+  transactionTypeId: string;
+  category: string;
+  categoryId: string;
+  transactionTime: Date;
   description: string;
 }
 
 export interface CreateBankTransactionDto {
-  TransactionTypeId: string;
-  Amount: number;
-  TransactionTime: Date;
-  Description?: string;
-  CategoryId: string;
+  transactionTypeId: string;
+  amount: number;
+  transactionTime: Date;
+  description?: string;
+  categoryId: string;
+}
+
+export interface UpdateBankTransactionDto {
+  id: string;
+  transactionTypeId: string;
+  amount: number;
+  transactionTime: Date;
+  categoryId: string;
+  description?: string;
 }

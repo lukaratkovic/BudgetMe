@@ -5,15 +5,16 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {TransactionType} from "../../models/transaction-type.model";
 import {TransactionTypeService} from "../../services/transaction-type.service";
 import {DropdownModule} from "primeng/dropdown";
-import {DynamicDialogRef} from "primeng/dynamicdialog";
+import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {ButtonModule} from "primeng/button";
 import {TransactionService} from "../../services/transaction.service";
-import {CreateBankTransactionDto} from "../../models/bank-transaction.model";
+import {BankTransaction, CreateBankTransactionDto, UpdateBankTransactionDto} from "../../models/bank-transaction.model";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CategoryService} from "../../../categories/services/category.service";
 import {Category} from "../../../categories/models/category.model";
 import {NotificationService} from "../../../../core/services/notification.service";
+import {take} from "rxjs";
 
 @Component({
   selector: 'app-transaction-details',
@@ -29,8 +30,11 @@ export class TransactionDetailsComponent implements OnInit {
   private transactionService = inject(TransactionService);
   private categoryService = inject(CategoryService);
   private notificationService = inject(NotificationService);
+  private dialogConfig = inject(DynamicDialogConfig);
 
   public form: FormGroup;
+
+  private id?: string;
 
   public transactionTypes: TransactionType[] = [];
   public categories: Category[] = [];
@@ -38,7 +42,8 @@ export class TransactionDetailsComponent implements OnInit {
   constructor() {
     const now = new Date();
     this.form = this.formBuilder.group({
-      typeId: [null, Validators.required],
+      id: null,
+      transactionTypeId: [null, Validators.required],
       amount: [0, [Validators.required, Validators.min(0)]],
       transactionTime: [now, [Validators.required]],
       description: [null],
@@ -48,8 +53,25 @@ export class TransactionDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.transactionTypeService.getAll().subscribe(data => this.transactionTypes = data);
+    this.loadEntity();
 
-    this.form.controls["typeId"].valueChanges.subscribe((id) => this.getCategoriesByTransactionType(id));
+    this.form.controls["transactionTypeId"].valueChanges.subscribe((id) => this.getCategoriesByTransactionType(id));
+  }
+
+  private loadEntity(): void {
+    const id = this.dialogConfig.data?.transactionId;
+    if (!id) return;
+
+    this.transactionService
+      .get(id)
+      .pipe(take(1))
+      .subscribe({
+        next: (data) => {
+          this.form.patchValue(data);
+          this.id = data.id;
+        },
+        error: (err) => this.notificationService.displayError(err.error),
+      });
   }
 
   private getCategoriesByTransactionType(transactionTypeId: string): void {
@@ -60,17 +82,27 @@ export class TransactionDetailsComponent implements OnInit {
     if (this.form.invalid)
       return;
 
-    // TODO: See if I really have to create a whole new object here or I can cast form data somehow
-    const dto: CreateBankTransactionDto = {
-      TransactionTypeId: this.form.controls['typeId'].value,
-      Amount: this.form.controls['amount'].value,
-      TransactionTime: this.form.controls['transactionTime'].value,
-      Description: this.form.controls['description'].value,
-      CategoryId: this.form.controls['categoryId'].value,
-    };
+    const dto = this.form.getRawValue();
 
+    if (this.id) {
+      this.update(dto as UpdateBankTransactionDto);
+    } else {
+      this.insert(dto as CreateBankTransactionDto);
+    }
+  }
+
+  public insert(dto: CreateBankTransactionDto): void {
     this.transactionService
       .save(dto)
+      .subscribe({
+        next: () => this.dialogRef.close({refresh: true}),
+        error: (err) => this.notificationService.displayError(err.error)
+      });
+  }
+
+  public update(dto: UpdateBankTransactionDto): void {
+    this.transactionService
+      .update(dto)
       .subscribe({
         next: () => this.dialogRef.close({refresh: true}),
         error: (err) => this.notificationService.displayError(err.error)
