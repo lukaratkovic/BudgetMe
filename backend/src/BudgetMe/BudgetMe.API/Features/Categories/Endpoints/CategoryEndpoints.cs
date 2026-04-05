@@ -53,6 +53,15 @@ public static class CategoryEndpoints
                         new { message = "System categories cannot be deleted." },
                         statusCode: StatusCodes.Status403Forbidden
                     );
+                
+                var hasRelatedTransactions = await context.BankTransaction
+                    .AnyAsync(x => x.CategoryId == category.Id);
+                if (hasRelatedTransactions)
+                    return Results.Json(
+                        new { message = "Transactions with this category exist. Please delete related transactions or change their type before retrying." },
+                        statusCode: StatusCodes.Status403Forbidden
+                    );
+                
                 context.Category.Remove(category);
                 await context.SaveChangesAsync();
                 return Results.NoContent();
