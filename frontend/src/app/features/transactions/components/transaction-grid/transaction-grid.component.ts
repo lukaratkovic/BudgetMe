@@ -7,12 +7,14 @@ import {ButtonModule} from "primeng/button";
 import {DialogService} from "primeng/dynamicdialog";
 import {TransactionDetailsComponent} from "../transaction-details/transaction-details.component";
 import {NotificationService} from "../../../../core/services/notification.service";
+import {ConfirmationService} from "primeng/api";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
 
 @Component({
   selector: 'app-transaction-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
-  providers: [DialogService],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule],
+  providers: [DialogService, ConfirmationService],
   templateUrl: './transaction-grid.component.html',
   styleUrls: ['./transaction-grid.component.sass']
 })
@@ -20,6 +22,7 @@ export class TransactionGridComponent implements OnInit {
   private transactionService = inject(TransactionService);
   private dialog = inject(DialogService);
   private notificationService = inject(NotificationService);
+  private confirmationService = inject(ConfirmationService);
 
   public transactions: BankTransaction[] = [];
 
@@ -56,9 +59,19 @@ export class TransactionGridComponent implements OnInit {
   }
 
   public onDelete(transaction: BankTransaction): void {
-    //TODO: Confirm
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this transaction?',
+      header: 'Delete transaction',
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonStyleClass: 'p-button-text',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => this.confirmDelete(transaction.id)
+    })
+  }
+
+  public confirmDelete(id: string): void {
     this.transactionService
-      .delete(transaction.id)
+      .delete(id)
       .subscribe({
         next: () => this.getTransactions(),
         error: (err) => this.notificationService.displayError(err.error),
