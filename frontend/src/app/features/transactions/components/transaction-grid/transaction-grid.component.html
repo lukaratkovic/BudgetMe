@@ -8,6 +8,10 @@
           Transaction type
           <p-sortIcon field="type"></p-sortIcon>
         </th>
+        <th pSortableColumn="category">
+          Category
+          <p-sortIcon field="category"></p-sortIcon>
+        </th>
         <th pSortableColumn="description">
           Description
           <p-sortIcon field="description"></p-sortIcon>
@@ -41,6 +45,7 @@
           </button>
         </td>
         <td>{{ transaction.type }}</td>
+        <td>{{ transaction.category }}</td>
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.transactionTime | date:'EEEE, MMMM dd, y, h:mm a' }}</td>
         <td>{{ transaction.amount | number: '1.2-2' }}</td>
@@ -48,6 +53,7 @@
     </ng-template>
     <ng-template pTemplate="footer">
       <tr>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
