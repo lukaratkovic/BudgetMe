@@ -1,6 +1,6 @@
 export interface Category  {
-  Id: string;
-  Name: string;
-  Description: string;
-  TransactionType: string;
+  id: string;
+  name: string;
+  description: string;
+  transactionType: string;
 }

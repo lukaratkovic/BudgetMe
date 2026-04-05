@@ -39,4 +39,20 @@ export class TransactionGridComponent implements OnInit {
         this.getTransactions();
     });
   }
+
+  public get balance(): number {
+    return this.income - this.expense;
+  }
+
+  private get income(): number {
+    return this.transactions
+      .filter(x => x.type == "Income")
+      .reduce((sum, item) => sum + item.amount, 0);
+  }
+
+  private get expense(): number {
+    return this.transactions
+      .filter(x => x.type == "Expense")
+      .reduce((sum, item) => sum + item.amount, 0);
+  }
 }

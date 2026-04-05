@@ -29,5 +29,13 @@
         <td>{{ transaction.amount | number: '1.2-2' }}</td>
       </tr>
     </ng-template>
+    <ng-template pTemplate="footer">
+      <tr>
+        <td></td>
+        <td></td>
+        <td><b>Balance:</b></td>
+        <td>{{ balance | number: '1.2-2' }}</td>
+      </tr>
+    </ng-template>
   </p-table>
 </div>
