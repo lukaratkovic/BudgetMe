@@ -1,4 +1,5 @@
 <p-fileUpload
   #fileUpload mode="basic" chooseLabel="Upload file" chooseIcon="pi pi-upload"
-  name="file" url="/api/transaction-import" accept=".xlsx" />
+  name="file" url="/api/transaction-import" accept=".xlsx"
+  (onUpload)="onUpload($event)" (onError)="onError($event)" />
 <p-button label="Import" (onClick)="fileUpload.upload()" severity="secondary"></p-button>
