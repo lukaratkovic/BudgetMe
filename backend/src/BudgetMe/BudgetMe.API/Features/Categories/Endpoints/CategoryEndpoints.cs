@@ -52,7 +52,7 @@ public static class CategoryEndpoints
                 });
             }
             
-            return Results.Created($"/api/category/{category.Id}", category); // TODO: Implement this get
+            return Results.Created($"/api/category/{category.Id}", category);
         });
 
         app.MapPut("/api/category/{id}", async (Guid id, UpdateCategoryDto dto, AppDbContext context) =>
@@ -86,8 +86,9 @@ public static class CategoryEndpoints
                         statusCode: StatusCodes.Status403Forbidden
                     );
                 
-                var hasRelatedTransactions = await context.BankTransaction
-                    .AnyAsync(x => x.CategoryId == category.Id);
+                var hasRelatedTransactions = await context.BankTransaction.AnyAsync(t => 
+                    t.Categories.Any(c => c.Id == id)
+                );
                 if (hasRelatedTransactions)
                     return Results.Json(
                         new { message = "Transactions with this category exist. Please delete related transactions or change their category before retrying." },

@@ -11,6 +11,7 @@ public class Category(Guid id, string name, string? description, Guid transactio
     [Required] public Guid TransactionTypeId { get; set; } = transactionTypeId;
     [Required] public TransactionType TransactionType { get; set; }
     [Required] public bool IsSystem { get; set; } = false;
+    public ICollection<BankTransaction> Transactions { get; set; } = new List<BankTransaction>();
 
     public Category(Guid id, string name, string? description, Guid transactionTypeId, bool isSystem) : this(id, name, description, transactionTypeId)
     {

@@ -5,7 +5,7 @@ public record BankTransactionDto(
     decimal Amount,
     string Type,
     Guid TransactionTypeId,
-    string Category,
-    Guid CategoryId,
+    List<string> CategoryNames,
+    List<Guid> CategoryIds,
     DateTime TransactionTime,
     string? Description);

@@ -8,9 +8,9 @@
           Transaction type
           <p-sortIcon field="type"></p-sortIcon>
         </th>
-        <th pSortableColumn="category">
+        <th pSortableColumn="categoryIds">
           Category
-          <p-sortIcon field="category"></p-sortIcon>
+          <p-sortIcon field="categoryIds"></p-sortIcon>
         </th>
         <th pSortableColumn="description">
           Description
@@ -45,7 +45,13 @@
           </button>
         </td>
         <td>{{ transaction.type }}</td>
-        <td>{{ transaction.category }}</td>
+        <td>
+          <p-tag
+            *ngFor="let category of transaction.categoryNames"
+            [value]="category"
+            class="mr-1">
+          </p-tag>
+        </td>
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.transactionTime | date:'EEEE, MMMM dd, y, h:mm a' }}</td>
         <td>{{ transaction.amount | number: '1.2-2' }}</td>

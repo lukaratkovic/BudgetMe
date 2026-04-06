@@ -8,18 +8,19 @@ import {DropdownModule} from "primeng/dropdown";
 import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {ButtonModule} from "primeng/button";
 import {TransactionService} from "../../services/transaction.service";
-import {BankTransaction, CreateBankTransactionDto, UpdateBankTransactionDto} from "../../models/bank-transaction.model";
+import {CreateBankTransactionDto, UpdateBankTransactionDto} from "../../models/bank-transaction.model";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CategoryService} from "../../../categories/services/category.service";
 import {Category} from "../../../categories/models/category.model";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {take} from "rxjs";
+import {MultiSelectModule} from "primeng/multiselect";
 
 @Component({
   selector: 'app-transaction-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputNumberModule, DropdownModule, ButtonModule, CalendarModule, InputTextareaModule],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberModule, DropdownModule, ButtonModule, CalendarModule, InputTextareaModule, MultiSelectModule],
   templateUrl: './transaction-details.component.html',
   styleUrls: ['./transaction-details.component.sass']
 })
@@ -44,10 +45,10 @@ export class TransactionDetailsComponent implements OnInit {
     this.form = this.formBuilder.group({
       id: null,
       transactionTypeId: [null, Validators.required],
-      amount: [0, [Validators.required, Validators.min(0)]],
+      amount: [null, [Validators.required, Validators.min(0.01)]],
       transactionTime: [now, [Validators.required]],
       description: [null],
-      categoryId: [null, [Validators.required]],
+      categoryIds: [[], [Validators.required]],
     });
   }
 
@@ -75,12 +76,24 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   private getCategoriesByTransactionType(transactionTypeId: string): void {
-    this.categoryService.getByTransactionType(transactionTypeId).subscribe(data => this.categories = data);
+    this.categoryService
+      .getByTransactionType(transactionTypeId)
+      .subscribe(data => {
+        this.categories = data;
+        // TODO: Currently clears categories on load, need to fix
+        this.form.controls["categoryIds"].setValue([]);
+        this.form.controls["categoryIds"].markAsPristine();
+      });
   }
 
   public submit(): void {
-    if (this.form.invalid)
+    if (this.form.invalid) {
+      Object.values(this.form.controls).forEach(control => {
+        control.markAsTouched();
+        control.markAsDirty();
+      });
       return;
+    }
 
     const dto = this.form.getRawValue();
 

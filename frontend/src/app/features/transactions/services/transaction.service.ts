@@ -44,7 +44,7 @@ export class TransactionService {
   private mapToModel(dto: BankTransactionDto): BankTransaction {
     return {
       ...dto,
-      transactionTime: DateHelper.parseLocalDate(dto.transactionTime)
+      transactionTime: DateHelper.parseLocalDate(dto.transactionTime),
     }
   }
 }

@@ -4,5 +4,5 @@ public record UpdateBankTransactionDto(
     Guid TransactionTypeId,
     decimal Amount,
     DateTime TransactionTime,
-    Guid CategoryId,
+    List<Guid> CategoryIds,
     string? Description);

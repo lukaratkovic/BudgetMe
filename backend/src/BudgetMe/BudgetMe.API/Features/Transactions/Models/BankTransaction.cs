@@ -8,14 +8,12 @@ public class BankTransaction(
     Guid transactionTypeId,
     DateTime transactionTime,
     decimal amount,
-    string? description,
-    Guid categoryId)
+    string? description)
 {
     public Guid Id { get; set; } = id;
     [Required] public Guid TransactionTypeId { get; set; } = transactionTypeId;
     [Required] public TransactionType TransactionType { get; set; } = null!;
-    [Required] public Guid CategoryId { get; set; } = categoryId;
-    [Required] public Category Category { get; set; } = null!;
+    public ICollection<Category> Categories { get; set; } = new List<Category>();
     public DateTime TransactionTime { get; set; } = transactionTime;
     public decimal Amount { get; set; } = amount;
     [StringLength(250)] public string? Description { get; set; } = description;

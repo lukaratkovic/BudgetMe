@@ -9,11 +9,12 @@ import {TransactionDetailsComponent} from "../transaction-details/transaction-de
 import {NotificationService} from "../../../../core/services/notification.service";
 import {ConfirmationService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {TagModule} from "primeng/tag";
 
 @Component({
   selector: 'app-transaction-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule],
   providers: [DialogService, ConfirmationService],
   templateUrl: './transaction-grid.component.html',
   styleUrls: ['./transaction-grid.component.sass']

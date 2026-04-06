@@ -1,5 +1,6 @@
 ﻿using BudgetMe.API.Data;
 using BudgetMe.API.Features.Transactions.DTOs;
+using BudgetMe.API.Features.Transactions.Mappings;
 using BudgetMe.API.Features.Transactions.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +13,7 @@ public static class TransactionEndpoints
         app.MapGet("/api/transaction", async (AppDbContext context) =>
         {
             return await context.BankTransaction
-                .Select(x => new BankTransactionDto(
-                    x.Id,
-                    x.Amount,
-                    x.TransactionType.Name,
-                    x.TransactionTypeId,
-                    x.Category.Name,
-                    x.CategoryId,
-                    x.TransactionTime,
-                    x.Description))
+                .Select(BankTransactionMappings.ToDto)
                 .ToListAsync();
         });
 
@@ -28,15 +21,7 @@ public static class TransactionEndpoints
         {
             var transaction = await context.BankTransaction
                 .Where(x => x.Id == id)
-                .Select(x => new BankTransactionDto(
-                    x.Id,
-                    x.Amount,
-                    x.TransactionType.Name,
-                    x.TransactionTypeId,
-                    x.Category.Name,
-                    x.CategoryId,
-                    x.TransactionTime,
-                    x.Description))
+                .Select(BankTransactionMappings.ToDto)
                 .FirstOrDefaultAsync();
             return transaction is not null
                 ? Results.Ok(transaction)
@@ -52,34 +37,56 @@ public static class TransactionEndpoints
                 .AnyAsync(x => x.Id == dto.TransactionTypeId);
             if (!transactionTypeExists)
                 return Results.BadRequest("Provided transaction type does not exist");
-        
-            var categoryExists = await context.Category
-                .AnyAsync(x => x.Id == dto.CategoryId);
-            if (!categoryExists)
-                return Results.BadRequest("Provided category does not exist");
 
-            var transaction = new BankTransaction(Guid.NewGuid(), dto.TransactionTypeId, dto.TransactionTime, dto.Amount, dto.Description, dto.CategoryId);
+            var categories = await context.Category
+                .Where(c => dto.CategoryIds.Contains(c.Id))
+                .ToListAsync();
+            
+            if (categories.Count != dto.CategoryIds.Count)
+                return Results.BadRequest("One or more of the provided categories does not exist");
+            var transaction = new BankTransaction(Guid.NewGuid(), dto.TransactionTypeId, dto.TransactionTime,
+                dto.Amount, dto.Description)
+            {
+                Categories = categories
+            };
 
             context.BankTransaction.Add(transaction);
             await context.SaveChangesAsync();
+            
+            var newTransactionDto = await context.BankTransaction
+                .Where(x => x.Id == transaction.Id)
+                .Select(BankTransactionMappings.ToDto)
+                .FirstOrDefaultAsync();
         
-            return Results.Created($"/api/transaction/{transaction.Id}", transaction);
+            return Results.Created($"/api/transaction/{transaction.Id}", newTransactionDto);
         });
 
         app.MapPut("/api/transaction/{id}", async (UpdateBankTransactionDto dto, Guid id, AppDbContext context) =>
         {
-            var affected = await context.BankTransaction
+            var transaction = await context.BankTransaction
+                .Include(x => x.Categories)
                 .Where(x => x.Id == id)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(x => x.TransactionTypeId, dto.TransactionTypeId)
-                    .SetProperty(x => x.Amount, dto.Amount)
-                    .SetProperty(x => x.TransactionTime, dto.TransactionTime)
-                    .SetProperty(x => x.CategoryId, dto.CategoryId)
-                    .SetProperty(x => x.Description, dto.Description)
-                );
-            
-            if (affected == 0)
+                .FirstOrDefaultAsync();
+            if (transaction is null)
                 return Results.NotFound();
+            
+            transaction.TransactionTypeId = dto.TransactionTypeId;
+            transaction.Amount = dto.Amount;
+            transaction.TransactionTime = dto.TransactionTime;
+            transaction.Categories = await context.Category
+                .Where(x => dto.CategoryIds.Contains(x.Id))
+                .ToListAsync();
+            transaction.Description = dto.Description;
+
+            if (transaction.Categories.Count != dto.CategoryIds.Count)
+                return Results.BadRequest("One or more provided categories do not exist");
+            
+            var hasInvalidTransactionTypes = transaction.Categories
+                .Any(c => c.TransactionTypeId != transaction.TransactionTypeId);
+            if (hasInvalidTransactionTypes)
+                return Results.BadRequest($"One or more provided categories have a transaction type that is different to the current transaction's type.");
+
+            await context.SaveChangesAsync();
 
             return Results.NoContent();
         });

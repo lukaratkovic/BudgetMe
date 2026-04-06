@@ -37,14 +37,16 @@
     </div>
 
     <div class="field col-12">
-      <label for="transactionTypeId">Category</label>
-      <p-dropdown
+      <label for="transactionTypeId">Categories</label>
+      <p-multiSelect
         [options]="categories"
         optionLabel="name"
         optionValue="id"
-        formControlName="categoryId"
-        appendTo="body">
-      </p-dropdown>
+        formControlName="categoryIds"
+        appendTo="body"
+        placeholder="Select categories"
+        [maxSelectedLabels]="20"
+        display="chip"/>
     </div>
 
   </div>

@@ -3,8 +3,8 @@ export interface BankTransaction {
   amount: number;
   type: string;
   transactionTypeId: string;
-  category: string;
-  categoryId: string;
+  categoryNames: string[];
+  categoryIds: string[];
   transactionTime: Date;
   description: string;
 }
@@ -14,8 +14,8 @@ export interface BankTransactionDto {
   amount: number;
   type: string;
   transactionTypeId: string;
-  category: string;
-  categoryId: string;
+  categoryNames: string[];
+  categoryIds: string[];
   transactionTime: string;
   description: string;
 }
@@ -25,13 +25,13 @@ export interface CreateBankTransactionDto {
   amount: number;
   transactionTime: Date | string;
   description?: string;
-  categoryId: string;
+  categoryIds: string[];
 }
 
 export interface UpdateBankTransactionDto {
   transactionTypeId: string;
   amount: number;
   transactionTime: Date | string;
-  categoryId: string;
+  categoryIds: string[];
   description?: string;
 }
