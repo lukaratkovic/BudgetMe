@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputNumberModule} from "primeng/inputnumber";
@@ -40,6 +40,8 @@ export class TransactionDetailsComponent implements OnInit {
   public transactionTypes: TransactionType[] = [];
   public categories: Category[] = [];
 
+  private isInitialLoad = false;
+
   constructor() {
     const now = new Date();
     this.form = this.formBuilder.group({
@@ -62,6 +64,7 @@ export class TransactionDetailsComponent implements OnInit {
   private loadEntity(): void {
     const id = this.dialogConfig.data?.transactionId;
     if (!id) return;
+    this.isInitialLoad = true;
 
     this.transactionService
       .get(id)
@@ -70,17 +73,20 @@ export class TransactionDetailsComponent implements OnInit {
         next: (data) => {
           this.form.patchValue(data);
           this.id = data.id;
+          this.isInitialLoad = false;
         },
         error: (err) => this.notificationService.displayError(err),
       });
   }
 
   private getCategoriesByTransactionType(transactionTypeId: string): void {
+    // Saving the state of initialLoad before service call because it might change by the time subscribe returns value
+    const clear = !this.isInitialLoad;
     this.categoryService
       .getByTransactionType(transactionTypeId)
       .subscribe(data => {
         this.categories = data;
-        // TODO: Currently clears categories on load, need to fix
+        if (!clear) return;
         this.form.controls["categoryIds"].setValue([]);
         this.form.controls["categoryIds"].markAsPristine();
       });
