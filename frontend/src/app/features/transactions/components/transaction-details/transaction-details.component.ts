@@ -47,7 +47,7 @@ export class TransactionDetailsComponent implements OnInit {
     this.form = this.formBuilder.group({
       id: null,
       transactionTypeId: [null, Validators.required],
-      amount: [null, [Validators.required, Validators.min(0.01)]],
+      amount: [null, [Validators.required]],
       transactionTime: [now, [Validators.required]],
       description: [null],
       categoryIds: [[], [Validators.required]],

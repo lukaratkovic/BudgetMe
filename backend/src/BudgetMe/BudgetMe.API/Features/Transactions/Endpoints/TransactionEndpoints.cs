@@ -31,8 +31,8 @@ public static class TransactionEndpoints
         
         app.MapPost("/api/transaction", async (CreateBankTransactionDto dto, AppDbContext context) =>
         {
-            if (dto.Amount <= 0)
-                return Results.BadRequest("Amount must be greater than 0");
+            if (dto.Amount == 0)
+                return Results.BadRequest("Amount must not be 0");
 
             var transactionTypeExists = await context.TransactionType
                 .AnyAsync(x => x.Id == dto.TransactionTypeId);
