@@ -10,6 +10,7 @@ import {NotificationService} from "../../../../core/services/notification.servic
 import {ConfirmationService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {TagModule} from "primeng/tag";
+import {TransactionImportInputComponent} from "../transaction-import-input/transaction-import-input.component";
 
 @Component({
   selector: 'app-transaction-grid',
@@ -69,6 +70,16 @@ export class TransactionGridComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => this.confirmDelete(transaction.id)
     })
+  }
+
+  public import(): void {
+    this.dialog.open(TransactionImportInputComponent, {
+      header: 'Import transactions',
+      width: '30%',
+    }).onClose.subscribe((refresh) => {
+      if (refresh)
+        this.getTransactions();
+    });
   }
 
   public confirmDelete(id: string): void {

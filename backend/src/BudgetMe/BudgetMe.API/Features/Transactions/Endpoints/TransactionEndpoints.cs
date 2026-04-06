@@ -2,6 +2,7 @@
 using BudgetMe.API.Features.Transactions.DTOs;
 using BudgetMe.API.Features.Transactions.Mappings;
 using BudgetMe.API.Features.Transactions.Models;
+using BudgetMe.API.Features.Transactions.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetMe.API.Features.Transactions.Endpoints;
@@ -109,5 +110,25 @@ public static class TransactionEndpoints
                 .Select(x => new TransactionTypeDto(x.Id, x.Name))
                 .ToListAsync();
         });
+
+        app.MapPost("/api/transaction-import", async (IFormFile file, IExcelImportService service, AppDbContext context) =>
+        {
+            if (file is null || file.Length == 0)
+                return Results.BadRequest("The file was not uploaded or contained no data.");
+
+            var result = await service.ImportTransactionsAsync(file);
+            
+            if (!result.IsSuccess)
+                return Results.BadRequest(result.Errors);
+
+            if (result.Data is null || !result.Data.Any())
+                return Results.BadRequest("0 transactions were successfully parsed.");
+            
+            await context.BankTransaction.AddRangeAsync(result.Data);
+            await context.SaveChangesAsync();
+
+            return Results.Ok();
+        })
+        .DisableAntiforgery();
     }
 }

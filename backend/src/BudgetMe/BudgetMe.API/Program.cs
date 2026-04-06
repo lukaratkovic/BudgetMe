@@ -1,12 +1,10 @@
-    using System.Transactions;
-    using BudgetMe.API.Data;
-    using BudgetMe.API.Features.Categories.DTOs;
-    using BudgetMe.API.Features.Categories.Endpoints;
-    using BudgetMe.API.Features.Transactions;
-    using BudgetMe.API.Features.Transactions.DTOs;
-    using BudgetMe.API.Features.Transactions.Endpoints;
-    using BudgetMe.API.Features.Transactions.Models;
-    using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+using BudgetMe.API.Data;
+using BudgetMe.API.Features.Categories.Endpoints;
+using BudgetMe.API.Features.Transactions.Endpoints;
+using BudgetMe.API.Features.Transactions.Services;
+using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +15,10 @@
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(
             builder.Configuration.GetConnectionString("Default")));
+    
+    builder.Services.AddScoped<IExcelImportService, ExcelImportService>();
+    
+    ExcelPackage.License.SetNonCommercialPersonal("lukaratkovic");
 
     var app = builder.Build();
 
