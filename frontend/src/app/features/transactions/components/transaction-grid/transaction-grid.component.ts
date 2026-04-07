@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TransactionService} from "../../services/transaction.service";
 import {BankTransaction} from "../../models/bank-transaction.model";
-import {TableModule} from "primeng/table";
+import {Table, TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {DialogService} from "primeng/dynamicdialog";
 import {TransactionDetailsComponent} from "../transaction-details/transaction-details.component";
@@ -11,30 +11,55 @@ import {ConfirmationService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {TagModule} from "primeng/tag";
 import {TransactionImportInputComponent} from "../transaction-import-input/transaction-import-input.component";
+import {DropdownModule} from "primeng/dropdown";
+import {TransactionTypeService} from "../../services/transaction-type.service";
+import {TransactionType} from "../../models/transaction-type.model";
+import {CategoryService} from "../../../categories/services/category.service";
+import {Category} from "../../../categories/models/category.model";
+import {MultiSelectModule} from "primeng/multiselect";
 
 @Component({
   selector: 'app-transaction-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule],
   providers: [DialogService, ConfirmationService],
   templateUrl: './transaction-grid.component.html',
   styleUrls: ['./transaction-grid.component.sass']
 })
 export class TransactionGridComponent implements OnInit {
   private transactionService = inject(TransactionService);
-  private dialog = inject(DialogService);
+  private transactionTypeService = inject(TransactionTypeService);
+  private categoryService = inject(CategoryService);
+
   private notificationService = inject(NotificationService);
   private confirmationService = inject(ConfirmationService);
+  private dialog = inject(DialogService);
+
+  @ViewChild('transactionGrid') table!: Table;
 
   public transactions: BankTransaction[] = [];
+  public transactionTypes: TransactionType[] = [];
+  public categories: Category[] = [];
 
   ngOnInit() {
     this.getTransactions();
+    this.getTransactionTypes();
+    this.getCategories();
   }
 
   private getTransactions(): void {
     this.transactionService.getAll()
       .subscribe(transactions => this.transactions = transactions);
+  }
+
+  private getTransactionTypes(): void {
+    this.transactionTypeService.getAll()
+      .subscribe(transactionTypes => this.transactionTypes = transactionTypes);
+  }
+
+  private getCategories(): void {
+    this.categoryService.getAll()
+      .subscribe(categories => this.categories = categories);
   }
 
   // TODO: Combine addNew and onEdit into one method
@@ -106,13 +131,13 @@ export class TransactionGridComponent implements OnInit {
   }
 
   private get income(): number {
-    return this.transactions
+    return (this.table?.filteredValue ?? this.transactions)
       .filter(x => x.type == "Income")
       .reduce((sum, item) => sum + item.amount, 0);
   }
 
   private get expense(): number {
-    return this.transactions
+    return (this.table?.filteredValue ?? this.transactions)
       .filter(x => x.type == "Expense")
       .reduce((sum, item) => sum + item.amount, 0);
   }

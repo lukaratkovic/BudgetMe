@@ -1,13 +1,28 @@
 <button pButton type="button" label="New" icon="pi pi-plus" class="mr-1" (click)="addNew()"></button>
 <button pButton type="button" label="Import" icon="pi pi-upload" class="mr-1" (click)="import()"></button>
 <div class="card">
-  <p-table [value]="transactions" sortField="transactionTime" [sortOrder]="-1" [paginator]="true" [rows]="20" [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-sm">
+  <p-table #transactionGrid [value]="transactions"
+           sortField="transactionTime" [sortOrder]="-1"
+           [paginator]="true" [rows]="20"
+           [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th></th>
         <th pSortableColumn="type">
           Transaction type
           <p-sortIcon field="type"></p-sortIcon>
+          <p-columnFilter field="type" matchMode="equals" display="menu">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown
+                [options]="transactionTypes"
+                optionLabel="name"
+                optionValue="name"
+                [showClear]="true"
+                placeholder="Select transaction type"
+                (onChange)="filter($event.value)">
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
         </th>
         <th pSortableColumn="categoryIds">
           Category
