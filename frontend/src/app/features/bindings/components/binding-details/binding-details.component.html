@@ -2,17 +2,12 @@
 
   <div class="grid">
     <div class="field col-12">
-      <label for="name">Name</label>
+      <label for="keyword">Keyword</label>
       <input
-        id="name"
-        type="text"
         pInputText
-        formControlName="name"/>
-    </div>
-
-    <div class="field col-12">
-      <label for="description">Description</label>
-      <textarea rows="3" cols="30" pInputTextarea formControlName="description"></textarea>
+        id="keyword"
+        name="keyword"
+        formControlName="keyword"/>
     </div>
 
     <div class="field col-12">
@@ -25,9 +20,20 @@
         appendTo="body">
       </p-dropdown>
     </div>
+
+    <div class="field col-12">
+      <label for="categoryId">Category</label>
+      <p-dropdown
+        [options]="categories"
+        optionLabel="name"
+        optionValue="id"
+        formControlName="categoryId"
+        appendTo="body">
+      </p-dropdown>
+    </div>
   </div>
 
   <button pButton type="submit" label="Save" class="w-auto mr-1 p-button-success"></button>
-  <button pButton type="button" label="Close" class="w-auto mr-1 p-button-secondary" (click)="close()"></button>
+  <button pButton type="button" label="Cancel" class="w-auto mr-1 p-button-secondary" (click)="close()"></button>
 
 </form>

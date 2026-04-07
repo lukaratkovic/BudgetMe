@@ -15,3 +15,13 @@ export interface BindingDto {
   transactionTypeId: string;
   transactionType: string;
 }
+
+export interface CreateBindingDto {
+  keyword: string;
+  categoryId: string;
+}
+
+export interface UpdateBindingDto {
+  keyword: string;
+  categoryId: string;
+}

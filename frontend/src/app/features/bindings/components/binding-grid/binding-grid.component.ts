@@ -7,14 +7,15 @@ import {ButtonModule} from "primeng/button";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
 import {take} from "rxjs";
-import {DynamicDialogRef} from "primeng/dynamicdialog";
 import {NotificationService} from "../../../../core/services/notification.service";
+import {DialogService} from "primeng/dynamicdialog";
+import {BindingDetailsComponent} from "../binding-details/binding-details.component";
 
 @Component({
   selector: 'app-binding-grid',
   standalone: true,
   imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule],
-  providers: [ConfirmationService],
+  providers: [ConfirmationService, DialogService],
   templateUrl: './binding-grid.component.html',
   styleUrls: ['./binding-grid.component.sass']
 })
@@ -22,6 +23,7 @@ export class BindingGridComponent {
   private bindingService = inject(BindingService);
   private confirmationService = inject(ConfirmationService);
   private notificationService = inject(NotificationService);
+  private dialog = inject(DialogService);
 
   public bindings: Binding[] = [];
 
@@ -32,6 +34,29 @@ export class BindingGridComponent {
   private getBindings(): void {
     this.bindingService.getAll()
       .subscribe(bindings => this.bindings = bindings);
+  }
+
+  public addNew(): void {
+    this.dialog.open(BindingDetailsComponent, {
+      header: 'New binding',
+      width: '30%',
+    }).onClose.subscribe(refresh => {
+      if (refresh)
+        this.getBindings();
+    });
+  }
+
+  public onEdit(binding: Binding): void {
+    this.dialog.open(BindingDetailsComponent, {
+      header: 'Edit binding',
+      width: '30%',
+      data: {
+        bindingId: binding.id
+      }
+    }).onClose.subscribe((refresh) => {
+      if (refresh)
+        this.getBindings();
+    });
   }
 
   public onDelete(binding: Binding): void {

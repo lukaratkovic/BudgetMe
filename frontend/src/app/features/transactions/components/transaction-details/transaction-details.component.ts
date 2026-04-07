@@ -16,6 +16,7 @@ import {Category} from "../../../categories/models/category.model";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {take} from "rxjs";
 import {MultiSelectModule} from "primeng/multiselect";
+import {FormHelper} from "../../../../core/helpers/form-helpers";
 
 @Component({
   selector: 'app-transaction-details',
@@ -94,10 +95,7 @@ export class TransactionDetailsComponent implements OnInit {
 
   public submit(): void {
     if (this.form.invalid) {
-      Object.values(this.form.controls).forEach(control => {
-        control.markAsTouched();
-        control.markAsDirty();
-      });
+      FormHelper.markAsDirty(this.form);
       return;
     }
 

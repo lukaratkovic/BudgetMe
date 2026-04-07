@@ -1,3 +1,4 @@
+<button pButton type="button" icon="pi pi-plus" label="New" (click)="addNew()"></button>
 <div class="card">
   <p-table [value]="bindings" [paginator]="true" [rows]="20" [tableStyle]="{'min-width': '50rem'}">
     <ng-template pTemplate="header">
@@ -20,7 +21,13 @@
     <ng-template pTemplate="body" let-binding>
       <tr>
         <td>
-          <!--TODO: Action buttons (edit)-->
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-text p-button-rounded p-button-sm"
+            (click)="onEdit(binding)">
+          </button>
           <button
             pButton
             type="button"
