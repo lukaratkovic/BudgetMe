@@ -19,7 +19,16 @@
     </ng-template>
     <ng-template pTemplate="body" let-binding>
       <tr>
-        <td><!--TODO: Action buttons (edit, delete)--></td>
+        <td>
+          <!--TODO: Action buttons (edit)-->
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-danger p-button-sm p-button-rounded"
+            (click)="onDelete(binding)">
+          </button>
+        </td>
         <td>{{ binding.keyword }}</td>
         <td>{{ binding.transactionType }}</td>
         <td>{{ binding.category }}</td>
@@ -27,3 +36,4 @@
     </ng-template>
   </p-table>
 </div>
+<p-confirmDialog />

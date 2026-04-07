@@ -15,6 +15,10 @@ export class BindingService {
     )
   }
 
+  public delete(id: string): Observable<void> {
+    return this.http.delete<void>(`/api/binding/${id}`);
+  }
+
   private mapToModel(dto: BindingDto): Binding {
     return {
       ...dto

@@ -20,5 +20,19 @@ public static class BindingEndpoints
                     x.Category.TransactionType.Name))
                 .ToListAsync();
         });
+
+        app.MapDelete("/api/binding/{id}", async (Guid id, AppDbContext context) =>
+        {
+            var binding = await context.Binding
+                .FindAsync(id);
+            
+            if (binding is null)
+                return Results.NotFound();
+
+            context.Remove(binding);
+            await context.SaveChangesAsync();
+            
+            return Results.NoContent();
+        });
     }
 }
