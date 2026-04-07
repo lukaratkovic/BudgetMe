@@ -91,11 +91,13 @@ export class TransactionGridComponent implements OnInit {
       });
   }
 
-  public getSeverity(category: string): string {
-    switch (category) {
-      case 'Other':
-        return 'info';
-      default: return 'success';
+  public getSeverity(transaction: BankTransaction): string {
+    switch (transaction.type) {
+      case 'Income':
+        return 'success';
+      case 'Expense':
+        return 'warning';
+      default: return 'danger';
     }
   }
 

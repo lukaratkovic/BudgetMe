@@ -21,6 +21,7 @@ public static class CategoryEndpoints
                 query = query.Where(x => x.TransactionTypeId == transactionTypeId);
         
             return await query
+                .OrderBy(x => x.Name)
                 .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.TransactionTypeId, x.IsSystem))
                 .ToListAsync();
         });
