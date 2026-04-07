@@ -10,12 +10,12 @@ namespace BudgetMe.API.Features.Transactions.Services;
 public class ExcelImportService : IExcelImportService
 {
     private readonly AppDbContext _context;
-    
+
     public ExcelImportService(AppDbContext context)
     {
         _context = context;
     }
-    
+
     public async Task<ImportResult<List<BankTransaction>>> ImportTransactionsAsync(IFormFile file)
     {
         using var stream = file.OpenReadStream();
@@ -24,9 +24,6 @@ public class ExcelImportService : IExcelImportService
 
         var transactions = new List<BankTransaction>();
         var errors = new List<string>();
-
-        var categories = await _context.Category
-            .ToDictionaryAsync(x => x.Id, x => x);
 
         for (int row = 6; row <= worksheet.Dimension.Rows; row++)
         {
@@ -37,24 +34,29 @@ public class ExcelImportService : IExcelImportService
             decimal amount;
 
             Guid transactionTypeId;
-            Guid categoryId;
             if (income != 0m && expense == 0m)
             {
                 transactionTypeId = TransactionTypeIds.Income;
                 amount = income;
-                categoryId = CategoryIds.OtherIncome;
             }
             else if (income == 0m && expense != 0m)
             {
                 transactionTypeId = TransactionTypeIds.Expense;
                 amount = expense;
-                categoryId = CategoryIds.OtherExpense;
             }
             else
             {
-                errors.Add($"Entry on row {row} has invalid parameters — either income or expense should be set, not both.");
+                errors.Add(
+                    $"Entry on row {row} has invalid parameters — either income or expense should be set, not both.");
                 continue;
             }
+
+            var categories = await _context.Binding
+                .Where(x => x.Category.TransactionTypeId == transactionTypeId)
+                .Where(x => description.Contains(x.Keyword))
+                .Select(x => x.Category)
+                .Distinct()
+                .ToListAsync();
 
             var transaction = new BankTransaction(
                 Guid.NewGuid(),
@@ -64,9 +66,9 @@ public class ExcelImportService : IExcelImportService
                 description
             )
             {
-                Categories = new List<Category> { categories[categoryId] }
+                Categories = categories
             };
-            
+
             transactions.Add(transaction);
         }
 
