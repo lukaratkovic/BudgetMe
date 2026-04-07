@@ -1,6 +1,7 @@
 <button pButton type="button" icon="pi pi-plus" label="New" (click)="addNew()"></button>
 <div class="card">
-  <p-table [value]="bindings" [paginator]="true" [rows]="20" [tableStyle]="{'min-width': '50rem'}">
+  <p-table [value]="bindings" [paginator]="true" [rows]="20"
+           [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th></th>

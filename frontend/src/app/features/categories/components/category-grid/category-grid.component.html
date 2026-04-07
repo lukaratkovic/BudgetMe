@@ -1,6 +1,7 @@
 <button pButton type="button" label="New" icon="pi pi-plus" (click)="addNew()"></button>
 <div class="card">
-  <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}" sortField="transactionType" [paginator]="true" [rows]="10">
+  <p-table [value]="categories" sortField="transactionType" [paginator]="true" [rows]="10"
+           [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="isSystem">
@@ -36,7 +37,7 @@
             pButton
             type="button"
             icon="pi pi-trash"
-            class="p-button-text p-button-rounded, p-button-sm p-button-danger"
+            class="p-button-text p-button-rounded p-button-sm p-button-danger"
             (click)="onDelete(category)"></button>
         </td>
         <td>{{ category.name }}</td>
