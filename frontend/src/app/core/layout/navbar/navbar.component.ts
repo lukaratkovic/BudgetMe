@@ -21,14 +21,20 @@ export class NavbarComponent implements OnInit {
         routerLink: '/transactions'
       },
       {
-        label: 'Transaction Categories',
-        icon: 'pi pi-folder-open',
-        routerLink: '/categories'
-      },
-      {
-        label: 'Bindings',
-        icon: 'pi pi-sliders-h',
-        routerLink: '/bindings'
+        label: 'Settings',
+        icon: 'pi pi-settings',
+        items: [
+          {
+            label: 'Transaction Categories',
+            icon: 'pi pi-folder-open',
+            routerLink: '/categories'
+          },
+          {
+            label: 'Bindings',
+            icon: 'pi pi-arrow-right-arrow-left',
+            routerLink: '/bindings'
+          }
+        ]
       }
     ]
   }
