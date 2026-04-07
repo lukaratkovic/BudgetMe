@@ -11,36 +11,10 @@
         <th pSortableColumn="type">
           Transaction type
           <p-sortIcon field="type"></p-sortIcon>
-          <p-columnFilter field="type" matchMode="equals" display="menu">
-            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-              <p-dropdown
-                [options]="transactionTypes"
-                optionLabel="name"
-                optionValue="name"
-                [showClear]="true"
-                placeholder="Select transaction type"
-                (onChange)="filter($event.value)">
-              </p-dropdown>
-            </ng-template>
-          </p-columnFilter>
         </th>
         <th pSortableColumn="categoryNames">
           Category
           <p-sortIcon field="categoryNames"></p-sortIcon>
-          <p-columnFilter field="categoryIds" matchMode="categoryIdFilter" display="menu" [showMatchModes]="false"
-                          [showOperator]="false"
-                          [showAddButton]="false">
-            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-              <p-multiSelect
-                [options]="categories"
-                optionLabel="distinctName"
-                optionValue="id"
-                placeholder="Select categories"
-                [showClear]="true"
-                (onChange)="filter($event.value)">
-              </p-multiSelect>
-            </ng-template>
-          </p-columnFilter>
         </th>
         <th pSortableColumn="description">
           Description
@@ -55,7 +29,55 @@
           <p-sortIcon field="amount"></p-sortIcon>
         </th>
       </tr>
+      <tr>
+        <th></th>
+        <th>
+          <p-columnFilter field="type" matchMode="equals" display="row" [showMenu]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown
+                [options]="transactionTypes"
+                optionLabel="name"
+                optionValue="name"
+                [showClear]="true"
+                (onChange)="filter($event.value)"
+                appendTo="body">
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter field="categoryIds" matchMode="categoryIdFilter" display="row">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-multiSelect
+                [options]="categories"
+                optionLabel="distinctName"
+                optionValue="id"
+                [showClear]="true"
+                (onChange)="filter($event.value)"
+                appendTo="body">
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="description"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="date" field="transactionTime"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter field="amount" [matchModeOptions]="amountMatchModeOptions">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-inputNumber
+                [showButtons]="false"
+                (onInput)="filter($event.value)">
+              </p-inputNumber>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+      </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-transaction>
       <tr>
         <td>
@@ -87,9 +109,10 @@
         </td>
         <td>{{ transaction.description }}</td>
         <td>{{ transaction.transactionTime | date:'EEEE, MMMM dd, y, h:mm a' }}</td>
-        <td>{{ transaction.amount | number: '1.2-2' }}</td>
+        <td>{{ transaction.amount | currency: 'EUR':'symbol' }}</td>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="footer">
       <tr>
         <td></td>
@@ -97,7 +120,7 @@
         <td></td>
         <td></td>
         <td><b>Balance:</b></td>
-        <td>{{ balance | number: '1.2-2' }}</td>
+        <td>{{ balance | currency: 'EUR':'symbol' }}</td>
       </tr>
     </ng-template>
   </p-table>

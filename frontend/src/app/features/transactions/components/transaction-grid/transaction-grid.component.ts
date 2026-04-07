@@ -17,11 +17,12 @@ import {TransactionType} from "../../models/transaction-type.model";
 import {CategoryService} from "../../../categories/services/category.service";
 import {Category} from "../../../categories/models/category.model";
 import {MultiSelectModule} from "primeng/multiselect";
+import {InputNumberModule} from "primeng/inputnumber";
 
 @Component({
   selector: 'app-transaction-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule, InputNumberModule],
   providers: [DialogService, ConfirmationService],
   templateUrl: './transaction-grid.component.html',
   styleUrls: ['./transaction-grid.component.sass']
@@ -150,5 +151,15 @@ export class TransactionGridComponent implements OnInit {
     return (this.table?.filteredValue ?? this.transactions)
       .filter(x => x.type == "Expense")
       .reduce((sum, item) => sum + item.amount, 0);
+  }
+
+  public get amountMatchModeOptions(): any[] {
+    return [
+      { label: '=', value: 'equals' },
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '≥', value: 'gte' },
+      { label: '≤', value: 'lte' }
+    ]
   }
 }
