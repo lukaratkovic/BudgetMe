@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using BudgetMe.API.Data;
+using BudgetMe.API.Features.Bindings.Endpoints;
 using BudgetMe.API.Features.Categories.Endpoints;
 using BudgetMe.API.Features.Transactions.Endpoints;
 using BudgetMe.API.Features.Transactions.Services;
@@ -33,5 +34,6 @@ using OfficeOpenXml;
     // Map endpoints
     app.MapCategoryEndpoints();
     app.MapTransactionEndpoints();
+    app.MapBindingEndpoints();
 
     app.Run();

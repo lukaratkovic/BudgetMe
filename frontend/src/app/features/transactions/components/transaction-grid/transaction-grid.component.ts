@@ -91,6 +91,14 @@ export class TransactionGridComponent implements OnInit {
       });
   }
 
+  public getSeverity(category: string): string {
+    switch (category) {
+      case 'Other':
+        return 'info';
+      default: return 'success';
+    }
+  }
+
   public get balance(): number {
     return this.income - this.expense;
   }

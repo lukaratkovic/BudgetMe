@@ -52,6 +52,7 @@
           <p-tag
             *ngFor="let category of transaction.categoryNames"
             [value]="category"
+            [severity]="getSeverity(category)"
             class="mr-1">
           </p-tag>
         </td>

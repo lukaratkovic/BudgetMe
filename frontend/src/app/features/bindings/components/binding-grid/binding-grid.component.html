@@ -1,0 +1,29 @@
+<div class="card">
+  <p-table [value]="bindings" [paginator]="true" [rows]="20" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th pSortableColumn="keyword">
+          Keyword
+          <p-sortIcon field="keyword"></p-sortIcon>
+        </th>
+        <th pSortableColumn="transactionType">
+          TransactionType
+          <p-sortIcon field="transactionType"></p-sortIcon>
+        </th>
+        <th pSortableColumn="category">
+          Category
+          <p-sortIcon field="category"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-binding>
+      <tr>
+        <td><!--TODO: Action buttons (edit, delete)--></td>
+        <td>{{ binding.keyword }}</td>
+        <td>{{ binding.transactionType }}</td>
+        <td>{{ binding.category }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

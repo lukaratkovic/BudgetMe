@@ -14,6 +14,12 @@ export const routes: Routes = [
         .then(m => m.CategoryGridComponent),
   },
   {
+    path: 'bindings',
+    loadComponent: () =>
+      import('./features/bindings/components/binding-grid/binding-grid.component')
+        .then(m => m.BindingGridComponent),
+  },
+  {
     path: '',
     redirectTo: 'transactions',
     pathMatch: 'full',
