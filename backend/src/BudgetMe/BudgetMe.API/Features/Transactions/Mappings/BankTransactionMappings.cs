@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BudgetMe.API.Features.Categories.DTOs;
 using BudgetMe.API.Features.Transactions.DTOs;
 using BudgetMe.API.Features.Transactions.Models;
 
@@ -12,8 +13,14 @@ public class BankTransactionMappings
             x.Amount,
             x.TransactionType.Name,
             x.TransactionTypeId,
-            x.Categories.Select(c => c.Name).ToList(),
-            x.Categories.Select(c => c.Id).ToList(),
+            x.Categories.Select(c => new CategoryDto(
+                c.Id,
+                c.Name,
+                c.Name,
+                c.Description,
+                c.TransactionType.Name,
+                c.TransactionTypeId,
+                c.IsSystem)).ToList(),
             x.TransactionTime,
             x.Description);
 }

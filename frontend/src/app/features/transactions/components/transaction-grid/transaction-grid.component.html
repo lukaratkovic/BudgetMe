@@ -49,7 +49,7 @@
           </p-columnFilter>
         </th>
         <th>
-          <p-columnFilter field="categoryIds" matchMode="categoryIdFilter" display="row">
+          <p-columnFilter field="categories" matchMode="categoryIdFilter" display="row">
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-multiSelect
                 [options]="categories"
@@ -106,8 +106,10 @@
         <td>{{ transaction.type }}</td>
         <td>
           <p-tag
-            *ngFor="let category of transaction.categoryNames"
-            [value]="category"
+            *ngFor="let category of transaction.categories"
+            [pTooltip]="category.description"
+            tooltipPosition="top"
+            [value]="category.name"
             [severity]="getSeverity(transaction)"
             class="mr-1">
           </p-tag>

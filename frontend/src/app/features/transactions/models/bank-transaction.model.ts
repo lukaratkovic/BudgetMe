@@ -1,10 +1,11 @@
+import {Category} from "../../categories/models/category.model";
+
 export interface BankTransaction {
   id: string;
   amount: number;
   type: string;
   transactionTypeId: string;
-  categoryNames: string[];
-  categoryIds: string[];
+  categories: Category[],
   transactionTime: Date;
   description: string;
 }
@@ -14,8 +15,7 @@ export interface BankTransactionDto {
   amount: number;
   type: string;
   transactionTypeId: string;
-  categoryNames: string[];
-  categoryIds: string[];
+  categories: Category[],
   transactionTime: string;
   description: string;
 }

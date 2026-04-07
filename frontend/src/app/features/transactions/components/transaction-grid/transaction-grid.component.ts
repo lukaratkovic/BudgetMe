@@ -54,10 +54,10 @@ export class TransactionGridComponent implements OnInit {
   }
 
   private registerCategoryFilter(): void {
-    this.filterService.register('categoryIdFilter', (value: string[], filter: string[]) => {
+    this.filterService.register('categoryIdFilter', (value: Category[], filter: string[]) => {
       if (!filter || filter.length === 0) return true;
-      if (!value) return false;
-      return value.some(v => filter.includes(v));
+      if (!value || value.length === 0) return false;
+      return value.some(category => filter.includes(category.id));
     });
   }
 
