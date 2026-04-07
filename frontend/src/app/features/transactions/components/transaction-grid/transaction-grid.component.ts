@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, ViewChild} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {TransactionService} from "../../services/transaction.service";
 import {BankTransaction} from "../../models/bank-transaction.model";
 import {Table, TableModule} from "primeng/table";
@@ -18,12 +18,13 @@ import {CategoryService} from "../../../categories/services/category.service";
 import {Category} from "../../../categories/models/category.model";
 import {MultiSelectModule} from "primeng/multiselect";
 import {InputNumberModule} from "primeng/inputnumber";
+import {TooltipModule} from "primeng/tooltip";
 
 @Component({
   selector: 'app-transaction-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule, InputNumberModule],
-  providers: [DialogService, ConfirmationService],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule, InputNumberModule, TooltipModule],
+  providers: [DialogService, ConfirmationService, DatePipe],
   templateUrl: './transaction-grid.component.html',
   styleUrls: ['./transaction-grid.component.sass']
 })
@@ -36,6 +37,8 @@ export class TransactionGridComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private filterService = inject(FilterService);
   private dialog = inject(DialogService);
+
+  private datePipe = inject(DatePipe);
 
   @ViewChild('transactionGrid') table!: Table;
 
@@ -135,6 +138,10 @@ export class TransactionGridComponent implements OnInit {
         return 'warning';
       default: return 'danger';
     }
+  }
+
+  public getFullDate(date: Date): string {
+    return this.datePipe.transform(date, 'EEEE, MMMM dd, y, h:mm a') ?? '';
   }
 
   public get balance(): number {
