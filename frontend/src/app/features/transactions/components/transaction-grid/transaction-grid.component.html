@@ -24,9 +24,23 @@
             </ng-template>
           </p-columnFilter>
         </th>
-        <th pSortableColumn="categoryIds">
+        <th pSortableColumn="categoryNames">
           Category
-          <p-sortIcon field="categoryIds"></p-sortIcon>
+          <p-sortIcon field="categoryNames"></p-sortIcon>
+          <p-columnFilter field="categoryIds" matchMode="categoryIdFilter" display="menu" [showMatchModes]="false"
+                          [showOperator]="false"
+                          [showAddButton]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-multiSelect
+                [options]="categories"
+                optionLabel="distinctName"
+                optionValue="id"
+                placeholder="Select categories"
+                [showClear]="true"
+                (onChange)="filter($event.value)">
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
         </th>
         <th pSortableColumn="description">
           Description

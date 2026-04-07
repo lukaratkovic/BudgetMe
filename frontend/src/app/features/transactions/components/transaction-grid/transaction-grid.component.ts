@@ -7,7 +7,7 @@ import {ButtonModule} from "primeng/button";
 import {DialogService} from "primeng/dynamicdialog";
 import {TransactionDetailsComponent} from "../transaction-details/transaction-details.component";
 import {NotificationService} from "../../../../core/services/notification.service";
-import {ConfirmationService} from "primeng/api";
+import {ConfirmationService, FilterService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {TagModule} from "primeng/tag";
 import {TransactionImportInputComponent} from "../transaction-import-input/transaction-import-input.component";
@@ -33,6 +33,7 @@ export class TransactionGridComponent implements OnInit {
 
   private notificationService = inject(NotificationService);
   private confirmationService = inject(ConfirmationService);
+  private filterService = inject(FilterService);
   private dialog = inject(DialogService);
 
   @ViewChild('transactionGrid') table!: Table;
@@ -42,9 +43,18 @@ export class TransactionGridComponent implements OnInit {
   public categories: Category[] = [];
 
   ngOnInit() {
+    this.registerCategoryFilter();
     this.getTransactions();
     this.getTransactionTypes();
     this.getCategories();
+  }
+
+  private registerCategoryFilter(): void {
+    this.filterService.register('categoryIdFilter', (value: string[], filter: string[]) => {
+      if (!filter || filter.length === 0) return true;
+      if (!value) return false;
+      return value.some(v => filter.includes(v));
+    });
   }
 
   private getTransactions(): void {

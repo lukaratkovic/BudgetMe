@@ -1,3 +1,3 @@
 ﻿namespace BudgetMe.API.Features.Categories.DTOs;
 
-public record CategoryDto(Guid Id, string Name, string? Description, string TransactionType, Guid TransactionTypeId, bool IsSystem);
+public record CategoryDto(Guid Id, string Name, string DistinctName, string? Description, string TransactionType, Guid TransactionTypeId, bool IsSystem);

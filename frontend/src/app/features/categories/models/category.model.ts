@@ -1,6 +1,7 @@
 export interface Category  {
   id: string;
   name: string;
+  distinctName: string;
   description: string;
   transactionType: string;
   isSystem: boolean;

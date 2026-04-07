@@ -1,5 +1,6 @@
 ﻿using BudgetMe.API.Data;
 using BudgetMe.API.Features.Categories.DTOs;
+using BudgetMe.API.Features.Categories.Mappings;
 using BudgetMe.API.Features.Categories.Models;
 using BudgetMe.API.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -19,18 +20,29 @@ public static class CategoryEndpoints
         
             if (transactionTypeId.HasValue)
                 query = query.Where(x => x.TransactionTypeId == transactionTypeId);
+
+            var duplicateNames = await context.Category
+                .GroupBy(x => x.Name)
+                .Where(x => x.Count() > 1)
+                .Select(x => x.Key)
+                .ToListAsync();
         
             return await query
                 .OrderBy(x => x.Name)
-                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.TransactionTypeId, x.IsSystem))
+                .Select(CategoryMappings.ToDto(duplicateNames))
                 .ToListAsync();
         });
 
         app.MapGet("/api/category/{id}", async (Guid id, AppDbContext context) =>
         {
+            var duplicateNames = await context.Category
+                .GroupBy(x => x.Name)
+                .Where(x => x.Count() > 1)
+                .Select(x => x.Key)
+                .ToListAsync();
             var category = await context.Category
                 .Where(x => x.Id == id)
-                .Select(x => new CategoryDto(x.Id, x.Name, x.Description, x.TransactionType.Name, x.TransactionTypeId, x.IsSystem))
+                .Select(CategoryMappings.ToDto(duplicateNames))
                 .FirstOrDefaultAsync();
             return category is not null
                 ? Results.Ok(category)
