@@ -3,7 +3,9 @@
   <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}" sortField="transactionType" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
-        <th></th>
+        <th pSortableColumn="isSystem">
+          <p-sortIcon field="isSystem"></p-sortIcon>
+        </th>
         <th pSortableColumn="name">
           Name
           <p-sortIcon field="name"></p-sortIcon>
