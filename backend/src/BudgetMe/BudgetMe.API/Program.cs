@@ -1,6 +1,7 @@
 using BudgetMe.API.Data;
 using BudgetMe.API.Features.Bindings.Endpoints;
 using BudgetMe.API.Features.Categories.Endpoints;
+using BudgetMe.API.Features.Reports.Endpoints;
 using BudgetMe.API.Features.Transactions.Endpoints;
 using BudgetMe.API.Features.Transactions.Services;
 using Microsoft.EntityFrameworkCore;
@@ -34,5 +35,6 @@ app.UseHttpsRedirection();
 app.MapCategoryEndpoints();
 app.MapTransactionEndpoints();
 app.MapBindingEndpoints();
+app.MapReportsEndpoints();
 
 app.Run();

@@ -1,4 +1,5 @@
 import { Routes} from "@angular/router";
+import {PerDayReportComponent} from "./features/reporting/components/per-day-report/per-day-report.component";
 
 export const routes: Routes = [
   {
@@ -18,6 +19,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/bindings/components/binding-grid/binding-grid.component')
         .then(m => m.BindingGridComponent),
+  },
+  {
+    path: 'reports',
+    children: [
+      { path: 'per-day', component: PerDayReportComponent }
+    ]
   },
   {
     path: '',

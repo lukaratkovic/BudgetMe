@@ -41,7 +41,7 @@ export class TransactionService {
     return this.http.delete<void>(`/api/transaction/${id}`);
   }
 
-  private mapToModel(dto: BankTransactionDto): BankTransaction {
+  public mapToModel(dto: BankTransactionDto): BankTransaction {
     return {
       ...dto,
       transactionTime: new Date(DateHelper.parseLocalDate(dto.transactionTime)),

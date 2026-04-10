@@ -113,7 +113,7 @@ export class TransactionGridComponent implements OnInit {
       rejectButtonStyleClass: 'p-button-text',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => this.confirmDelete(transaction.id)
-    })
+    });
   }
 
   public confirmDelete(id: string): void {
