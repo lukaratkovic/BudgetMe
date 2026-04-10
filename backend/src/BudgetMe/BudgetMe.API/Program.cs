@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using BudgetMe.API.Data;
 using BudgetMe.API.Features.Bindings.Endpoints;
 using BudgetMe.API.Features.Categories.Endpoints;
@@ -7,33 +6,33 @@ using BudgetMe.API.Features.Transactions.Services;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
-    var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-    // Add services to the container.
-    // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-    builder.Services.AddOpenApi();
+// Add services to the container.
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
 
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString("Default")));
-    
-    builder.Services.AddScoped<IExcelImportService, ExcelImportService>();
-    
-    ExcelPackage.License.SetNonCommercialPersonal("lukaratkovic");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("Default")));
 
-    var app = builder.Build();
+builder.Services.AddScoped<IExcelImportService, ExcelImportService>();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-    }
+ExcelPackage.License.SetNonCommercialPersonal("lukaratkovic");
 
-    app.UseHttpsRedirection();
-    
-    // Map endpoints
-    app.MapCategoryEndpoints();
-    app.MapTransactionEndpoints();
-    app.MapBindingEndpoints();
+var app = builder.Build();
 
-    app.Run();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseHttpsRedirection();
+
+// Map endpoints
+app.MapCategoryEndpoints();
+app.MapTransactionEndpoints();
+app.MapBindingEndpoints();
+
+app.Run();

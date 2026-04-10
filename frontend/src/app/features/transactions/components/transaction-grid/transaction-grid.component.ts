@@ -7,7 +7,7 @@ import {ButtonModule} from "primeng/button";
 import {DialogService} from "primeng/dynamicdialog";
 import {TransactionDetailsComponent} from "../transaction-details/transaction-details.component";
 import {NotificationService} from "../../../../core/services/notification.service";
-import {ConfirmationService, FilterService} from "primeng/api";
+import {ConfirmationService, FilterMatchMode, FilterService} from "primeng/api";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {TagModule} from "primeng/tag";
 import {TransactionImportInputComponent} from "../transaction-import-input/transaction-import-input.component";
@@ -19,11 +19,16 @@ import {Category} from "../../../categories/models/category.model";
 import {MultiSelectModule} from "primeng/multiselect";
 import {InputNumberModule} from "primeng/inputnumber";
 import {TooltipModule} from "primeng/tooltip";
+import {InputTextModule} from "primeng/inputtext";
+import {CalendarModule} from "primeng/calendar";
+import {FormsModule} from "@angular/forms";
+import {DateHelper} from "../../../../core/helpers/date-helper";
+import {SelectButtonModule} from "primeng/selectbutton";
 
 @Component({
   selector: 'app-transaction-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule, InputNumberModule, TooltipModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TagModule, DropdownModule, MultiSelectModule, InputNumberModule, TooltipModule, InputTextModule, CalendarModule, FormsModule, SelectButtonModule],
   providers: [DialogService, ConfirmationService, DatePipe],
   templateUrl: './transaction-grid.component.html',
   styleUrls: ['./transaction-grid.component.sass']
@@ -111,6 +116,15 @@ export class TransactionGridComponent implements OnInit {
     })
   }
 
+  public confirmDelete(id: string): void {
+    this.transactionService
+      .delete(id)
+      .subscribe({
+        next: () => this.getTransactions(),
+        error: (err) => this.notificationService.displayError(err),
+      });
+  }
+
   public import(): void {
     this.dialog.open(TransactionImportInputComponent, {
       header: 'Import transactions',
@@ -119,15 +133,6 @@ export class TransactionGridComponent implements OnInit {
       if (refresh)
         this.getTransactions();
     });
-  }
-
-  public confirmDelete(id: string): void {
-    this.transactionService
-      .delete(id)
-      .subscribe({
-        next: () => this.getTransactions(),
-        error: (err) => this.notificationService.displayError(err),
-      });
   }
 
   public getSeverity(transaction: BankTransaction): string {

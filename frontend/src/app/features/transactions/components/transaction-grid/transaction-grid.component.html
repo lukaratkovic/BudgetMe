@@ -27,7 +27,7 @@
           <p-sortIcon field="amount"></p-sortIcon>
         </th>
       </tr>
-      <tr>
+      <tr class="header-filter-row">
         <th>
           <div class="action-buttons">
             <button pButton pTooltip="New" type="button" icon="pi pi-plus" class="mr-1 p-button-s p-button-rounded p-button-text" (click)="addNew()"></button>
@@ -63,10 +63,30 @@
           </p-columnFilter>
         </th>
         <th>
-          <p-columnFilter type="text" field="description"></p-columnFilter>
+          <p-columnFilter field="description" matchMode="contains" display="row">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <input
+                pInputText
+                type="text"
+                [value]="value"
+                (input)="filter($any($event.target).value)" />
+            </ng-template>
+          </p-columnFilter>
         </th>
         <th>
-          <p-columnFilter type="date" field="transactionTime"></p-columnFilter>
+          <p-columnFilter field="transactionTime" display="row" [showMenu]="false" matchMode="dateIs">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <div class="flex flex-column gap-2">
+                <p-calendar
+                  [ngModel]="value"
+                  selectionMode="single"
+                  (onSelect)="filter($event)"
+                  dateFormat="yy-mm-dd"
+                  appendTo="body">
+                </p-calendar>
+              </div>
+            </ng-template>
+          </p-columnFilter>
         </th>
         <th>
           <p-columnFilter field="amount" [matchModeOptions]="amountMatchModeOptions">
