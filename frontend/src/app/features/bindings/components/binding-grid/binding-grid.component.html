@@ -1,4 +1,3 @@
-<button pButton type="button" icon="pi pi-plus" label="New" (click)="addNew()"></button>
 <div class="card">
   <p-table [value]="bindings" [paginator]="true" [rows]="20"
            [tableStyle]="{'min-width': '50rem'}" styleClass="p-datatable-sm">
@@ -16,6 +15,52 @@
         <th pSortableColumn="category">
           Category
           <p-sortIcon field="category"></p-sortIcon>
+        </th>
+      </tr>
+      <tr class="header-filter-row">
+        <th>
+          <div class="action-buttons">
+            <button pButton pTooltip="New" type="button" icon="pi pi-plus" class="mr-1 p-button-sm p-button-rounded p-button-text" (click)="addNew()"></button>
+          </div>
+        </th>
+        <th>
+          <p-columnFilter field="keyword" matchMode="contains" display="row">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <input
+                pInputText
+                type="text"
+                [value]="value"
+                (input)="filter($any($event.target).value)" />
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter field="transactionType" matchMode="equals" display="row">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown
+                [options]="transactionTypes"
+                optionLabel="name"
+                optionValue="name"
+                [showClear]="true"
+                (onChange)="filter($event.value)"
+                appendTo="body">
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter field="category" matchMode="equals" display="row">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown
+                [options]="categories"
+                optionLabel="name"
+                optionValue="name"
+                [showClear]="true"
+                (onChange)="filter($event.value)"
+                appendTo="body">
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
         </th>
       </tr>
     </ng-template>

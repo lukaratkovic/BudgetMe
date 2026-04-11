@@ -10,30 +10,55 @@ import {take} from "rxjs";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {DialogService} from "primeng/dynamicdialog";
 import {BindingDetailsComponent} from "../binding-details/binding-details.component";
+import {TransactionType} from "../../../transactions/models/transaction-type.model";
+import {TransactionTypeService} from "../../../transactions/services/transaction-type.service";
+import {TooltipModule} from "primeng/tooltip";
+import {InputTextModule} from "primeng/inputtext";
+import {DropdownModule} from "primeng/dropdown";
+import {CategoryService} from "../../../categories/services/category.service";
+import {Category} from "../../../categories/models/category.model";
 
 @Component({
   selector: 'app-binding-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TooltipModule, InputTextModule, DropdownModule],
   providers: [ConfirmationService, DialogService],
   templateUrl: './binding-grid.component.html',
   styleUrls: ['./binding-grid.component.sass']
 })
 export class BindingGridComponent {
   private bindingService = inject(BindingService);
+  private transactionTypeService = inject(TransactionTypeService);
+  private categoryService = inject(CategoryService);
+
   private confirmationService = inject(ConfirmationService);
   private notificationService = inject(NotificationService);
+
   private dialog = inject(DialogService);
 
   public bindings: Binding[] = [];
+  public transactionTypes: TransactionType[] = [];
+  public categories: Category[] = [];
 
   constructor() {
     this.getBindings();
+    this.getTransactionTypes();
+    this.getCategories();
   }
 
   private getBindings(): void {
     this.bindingService.getAll()
       .subscribe(bindings => this.bindings = bindings);
+  }
+
+  private getTransactionTypes(): void {
+    this.transactionTypeService.getAll()
+      .subscribe(types => this.transactionTypes = types);
+  }
+
+  private getCategories(): void {
+    this.categoryService.getAll()
+      .subscribe(categories => this.categories = categories);
   }
 
   public addNew(): void {
