@@ -8,13 +8,15 @@ import {DayData, GroupedTransactionsTreeNode, MonthData, YearData} from "../mode
 import {TreeNode} from "primeng/api";
 import {BankTransactionDto} from "../../transactions/models/bank-transaction.model";
 import {TransactionTypeHelper} from "../../../core/helpers/transaction-type-helper";
+import {DatePipe} from "@angular/common";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReportService {
   private http = inject(HttpClient);
   private transactionService = inject(TransactionService);
+  private datePipe = new DatePipe('en-US');
 
   public getPerDayReportData(): Observable<PerDayReportData[]> /*TODO: Put right return type*/ {
     return this.http.get<PerDayReportDto[]>('/api/reports/per-day').pipe(
@@ -59,7 +61,7 @@ export class ReportService {
   private dayDataToTreeNode(dayData: DayData): TreeNode {
     return {
       data: {
-        label: dayData.date.toString(), // TODO: Probably need to format it
+        label: this.datePipe.transform(dayData.date, 'longDate'),
         income: dayData.income,
         expense: dayData.expense,
         balance: dayData.balance,
