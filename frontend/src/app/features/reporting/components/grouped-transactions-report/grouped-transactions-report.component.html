@@ -1,5 +1,15 @@
 <div class="card">
-  <p-treeTable [value]="data" [scrollable]="true" [tableStyle]="">
+  <div class="flex justify-content-end">
+    <button pButton type="button" icon="pi pi-caret-down" pTooltip="Expand" tooltipPosition="left" [showDelay]="500"
+            class="p-button-text p-button-secondary p-button-rounded p-button-sm"
+            (click)="toggleExpand(true)">
+    </button>
+    <button pButton type="button" icon="pi pi-caret-up" pTooltip="Collapse" tooltipPosition="left" [showDelay]="500"
+            class="p-button-text p-button-secondary p-button-rounded p-button-sm"
+            (click)="toggleExpand(false)">
+    </button>
+  </div>
+  <p-treeTable [value]="data" [scrollable]="true" styleClass="p-treetable-sm">
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 70%"></th>
@@ -9,14 +19,20 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-      <tr [ttRow]="rowNode" style="width: 70%">
+      <tr [ttRow]="rowNode" [ngStyle]="{'background-color': getRowColor(rowNode.level), 'width:': '70%'}">
         <td>
           <p-treeTableToggler [rowNode]="rowNode" />
           {{ rowData.label }}
         </td>
-        <td style="width: 10%">{{ rowData.income }}</td>
-        <td style="width: 10%">{{ rowData.expense }}</td>
-        <td style="width: 10%">{{ rowData.balance }}</td>
+        <td [ngStyle]="{'font-weight': getFontWeight(rowNode.level, rowData.income), 'width': '10%'}">
+          {{ rowData.income | currency: 'EUR':'symbol' }}
+        </td>
+        <td [ngStyle]="{'font-weight': getFontWeight(rowNode.level, rowData.expense), 'width': '10%'}">
+          {{ rowData.expense | currency: 'EUR':'symbol' }}
+        </td>
+        <td style="width: 10%">
+          {{ rowData.balance | currency: 'EUR':'symbol' }}
+        </td>
       </tr>
     </ng-template>
   </p-treeTable>
