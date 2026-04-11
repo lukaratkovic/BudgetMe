@@ -44,6 +44,7 @@ export class TransactionService {
   public mapToModel(dto: BankTransactionDto): BankTransaction {
     return {
       ...dto,
+      categoryIds: dto.categories.map(c => c.id),
       transactionTime: new Date(DateHelper.parseLocalDate(dto.transactionTime)),
     }
   }

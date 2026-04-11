@@ -6,6 +6,7 @@ export interface BankTransaction {
   type: string;
   transactionTypeId: string;
   categories: Category[],
+  categoryIds: string[],
   transactionTime: Date;
   description: string;
 }
