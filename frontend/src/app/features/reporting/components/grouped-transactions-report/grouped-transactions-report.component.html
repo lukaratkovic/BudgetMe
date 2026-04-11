@@ -1,0 +1,23 @@
+<div class="card">
+  <p-treeTable [value]="data" [scrollable]="true" [tableStyle]="">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 70%"></th>
+        <th style="width: 10%">Income</th>
+        <th style="width: 10%">Expense</th>
+        <th style="width: 10%">Balance</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+      <tr [ttRow]="rowNode" style="width: 70%">
+        <td>
+          <p-treeTableToggler [rowNode]="rowNode" />
+          {{ rowData.label }}
+        </td>
+        <td style="width: 10%">{{ rowData.income }}</td>
+        <td style="width: 10%">{{ rowData.expense }}</td>
+        <td style="width: 10%">{{ rowData.balance }}</td>
+      </tr>
+    </ng-template>
+  </p-treeTable>
+</div>

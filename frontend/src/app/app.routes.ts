@@ -1,5 +1,7 @@
 import { Routes} from "@angular/router";
-import {PerDayReportComponent} from "./features/reporting/components/per-day-report/per-day-report.component";
+import {
+  GroupedTransactionsReportComponent
+} from "./features/reporting/components/grouped-transactions-report/grouped-transactions-report.component";
 
 export const routes: Routes = [
   {
@@ -23,7 +25,7 @@ export const routes: Routes = [
   {
     path: 'reports',
     children: [
-      { path: 'per-day', component: PerDayReportComponent }
+      { path: 'grouped-transactions', component: GroupedTransactionsReportComponent }
     ]
   },
   {

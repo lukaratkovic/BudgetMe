@@ -25,9 +25,9 @@ export class NavbarComponent implements OnInit {
         icon: 'pi pi-chart-line',
         items: [
           {
-            label: 'Per-day report',
-            icon: 'pi pi-calendar',
-            routerLink: '/reports/per-day'
+            label: 'Grouped transactions',
+            icon: 'pi pi-table',
+            routerLink: '/reports/grouped-transactions'
           }
         ]
       },
