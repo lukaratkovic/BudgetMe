@@ -9,30 +9,45 @@ import {CategoryDetailsComponent} from "../category-details/category-details.com
 import {ConfirmationService} from "primeng/api";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {TooltipModule} from "primeng/tooltip";
+import {InputTextModule} from "primeng/inputtext";
+import {TransactionType} from "../../../transactions/models/transaction-type.model";
+import {TransactionTypeService} from "../../../transactions/services/transaction-type.service";
+import {DropdownModule} from "primeng/dropdown";
 
 @Component({
   selector: 'app-category-grid',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, TooltipModule, InputTextModule, DropdownModule],
   providers: [DialogService, ConfirmationService],
   templateUrl: './category-grid.component.html',
   styleUrls: ['./category-grid.component.sass']
 })
 export class CategoryGridComponent implements OnInit {
   private categoryService = inject(CategoryService);
-  private dialog = inject(DialogService);
+  private transactionTypeService = inject(TransactionTypeService);
+
   private confirmationService = inject(ConfirmationService);
   private notificationService = inject(NotificationService);
 
+  private dialog = inject(DialogService);
+
   public categories: Category[] = [];
+  public transactionTypes: TransactionType[] = [];
 
   ngOnInit() {
     this.getCategories();
+    this.getTransactionTypes();
   }
 
   private getCategories(): void {
     this.categoryService.getAll()
       .subscribe(categories => this.categories = categories);
+  }
+
+  private getTransactionTypes(): void {
+    this.transactionTypeService.getAll()
+      .subscribe(types => this.transactionTypes = types);
   }
 
   // TODO: Combine addNew and onEdit into one method
