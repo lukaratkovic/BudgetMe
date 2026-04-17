@@ -8,7 +8,8 @@ public class BankTransaction(
     Guid transactionTypeId,
     DateTime transactionTime,
     decimal amount,
-    string? description)
+    string? description,
+    string? referenceNumber = null)
 {
     public Guid Id { get; set; } = id;
     [Required] public Guid TransactionTypeId { get; set; } = transactionTypeId;
@@ -17,4 +18,5 @@ public class BankTransaction(
     public DateTime TransactionTime { get; set; } = transactionTime;
     public decimal Amount { get; set; } = amount;
     [StringLength(250)] public string? Description { get; set; } = description;
+    [StringLength(100)] public string? ReferenceNumber { get; set; } = referenceNumber;
 }

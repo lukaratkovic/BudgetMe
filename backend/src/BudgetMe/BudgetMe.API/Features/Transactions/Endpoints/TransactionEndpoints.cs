@@ -121,8 +121,8 @@ public static class TransactionEndpoints
             if (!result.IsSuccess)
                 return Results.BadRequest(result.Errors);
 
-            if (result.Data is null || !result.Data.Any())
-                return Results.BadRequest("0 transactions were successfully parsed.");
+            if (result.Data is null)
+                return Results.BadRequest();
             
             await context.BankTransaction.AddRangeAsync(result.Data);
             await context.SaveChangesAsync();

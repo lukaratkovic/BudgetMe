@@ -25,9 +25,14 @@ public class ExcelImportService : IExcelImportService
         var transactions = new List<BankTransaction>();
         var errors = new List<string>();
 
+        var bindings = await _context.Binding
+            .Include(x => x.Category)
+            .ToListAsync();
+
         for (int row = 6; row <= worksheet.Dimension.Rows; row++)
         {
             var date = worksheet.Cells[row, 1].GetValue<DateTime>();
+            var referenceNumber = worksheet.Cells[row, 2].GetValue<string>();
             var description = worksheet.Cells[row, 3].Text;
             var income = worksheet.Cells[row, 4].GetValue<decimal>();
             var expense = worksheet.Cells[row, 5].GetValue<decimal>();
@@ -51,19 +56,20 @@ public class ExcelImportService : IExcelImportService
                 continue;
             }
 
-            var categories = await _context.Binding
+            var categories = bindings
                 .Where(x => x.Category.TransactionTypeId == transactionTypeId)
                 .Where(x => description.Contains(x.Keyword))
                 .Select(x => x.Category)
                 .Distinct()
-                .ToListAsync();
+                .ToList();
 
             var transaction = new BankTransaction(
                 Guid.NewGuid(),
                 transactionTypeId,
                 date,
                 amount,
-                description
+                description,
+                referenceNumber
             )
             {
                 Categories = categories
@@ -71,6 +77,18 @@ public class ExcelImportService : IExcelImportService
 
             transactions.Add(transaction);
         }
+
+        if (!errors.Any() && !transactions.Any())
+        {
+            errors.Add("0 transactions were successfully parsed.");
+            return ImportResult<List<BankTransaction>>.Fail(errors);   
+        }
+
+        // Exclude transactions that have already been imported
+        transactions = transactions
+            .Where(t =>
+                !_context.BankTransaction.Any(x => x.ReferenceNumber == t.ReferenceNumber))
+            .ToList();
 
         return errors.Any()
             ? ImportResult<List<BankTransaction>>.Fail(errors)
